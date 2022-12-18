@@ -61,6 +61,7 @@ export class PointTable {
         const fifo = Object.keys(this.#job).map((index: string) => +index) as number[];
         const index = !fifo.length ? 1 : Math.max(...fifo) + 1;
 
+
         this.#job[index] = setInterval(() => this[name](index), time);
     }
 
@@ -71,16 +72,19 @@ export class PointTable {
 
         const tablesToCheck = hall.children.slice(0, range);
 
-        const occupied = tablesToCheck.some((table: any) => table.children.length);
+        const occupied = tablesToCheck.some((table: any) => !table.userData.empty);
 
         if (!occupied && !this.hasJobPending(jobId)) {
             const point = this.scene.getObjectByName(this.name);
+            const carBody = point.children[0].clone();
 
-            tablesToCheck[startAt].add(...point.children);
+            tablesToCheck[startAt].add(carBody);
+            tablesToCheck[startAt].userData.carBody = carBody.name;
+            tablesToCheck[startAt].userData.empty = false;
 
             point.clear();
 
-            point.userData.empty = true;
+            this.empty = true;
 
             this.clearJob(jobId);
 

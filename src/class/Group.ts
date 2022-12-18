@@ -1,8 +1,8 @@
-export class Line {
+export class Group {
     THREE: any;
     #scene: any;
     #name: string;
-    #occupied: number;
+    #tablesOccupied: number;
     #capacity: number;
     #empty: boolean;
     #point: string;
@@ -13,14 +13,14 @@ export class Line {
         scene: any,
         name: string,
         capacity: number,
-        occupied: number,
+        tablesOccupied: number,
         empty: boolean,
         point: string
     ) {
         this.THREE = THREE;
         this.#scene = scene;
         this.#name = name;
-        this.#occupied = occupied;
+        this.#tablesOccupied = tablesOccupied;
         this.#capacity = capacity;
         this.#empty = empty;
         this.#point = point;
@@ -34,8 +34,8 @@ export class Line {
         return this.#name;
     }
 
-    get occupied() {
-        return this.#occupied;
+    get tablesOccupied() {
+        return this.#tablesOccupied;
     }
 
     get capacity() {
@@ -54,8 +54,8 @@ export class Line {
         this.#empty = empty;
     }
 
-    set occupied(occupied: number) {
-        this.#occupied = occupied;
+    set tablesOccupied(tablesOccupied: number) {
+        this.#tablesOccupied = tablesOccupied;
     }
 
     set capacity(capacity: number) {
@@ -81,22 +81,25 @@ export class Line {
     public checkForFreePoint({ jobId, carBody }: any) {
         const point = this.scene.getObjectByName(this.point);
 
-        if (point.children.length) return;
+        if (!point.userData.empty) return;
 
         this.clearJob(jobId);
 
         const hall = this.scene.getObjectByName(this.name);
 
-        const lastTable = hall.children[hall.children.length - 1];
+        const lastTable = hall.children[hall.userData.capacity - 1];
 
         if (
-            lastTable.children.length && 
-            lastTable.children?.[0]?.name === carBody.name
+            !lastTable.userData.empty && 
+            lastTable.userData.carBody === carBody.name
         ) {
             lastTable.clear();
+            lastTable.userData.empty = true;
         }
 
         point.add(carBody);
+
+        point.userData.empty = false;
 
         setTimeout(() => {
             point.userData.startJob('checkForFreeTable');
@@ -108,11 +111,11 @@ export class Line {
         const tables = hall.children;
     
         let lastIndex = null;
-    
+
         for (let i = 0; i < tables.length; i++) {
             const currentTable = tables[i];
 
-            if (currentTable.children.length && i !== lastIndex) {
+            if (!currentTable.userData.empty && i !== lastIndex) {
                 const currentTable = tables[i];
                 const carBody = currentTable.children[0].clone();
                 const nextTable = tables[i + 1];
@@ -123,15 +126,19 @@ export class Line {
                         this.startJob("checkForFreePoint", { jobId: carBody.name, carBody: carBody }, 1000);
                     } else {
                         currentTable.clear();
+                        currentTable.userData.empty = true;
                     }
 
                     break;
                 } else {
-                    if (nextTable.children.length) continue;
+                    if (!nextTable.userData.empty) continue;
 
                     currentTable.clear();
+                    currentTable.userData.empty = true;
 
                     nextTable.add(carBody);
+                    nextTable.userData.empty = false;
+                    nextTable.userData.carBody = carBody.name;
         
                     lastIndex = i + 1;
                 }

@@ -4,7 +4,9 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import Stats from 'three/examples/jsm/libs/stats.module'
 import { Trel } from "./class/Trel";
 import { PointTable } from "./class/PointTable";
-import { Line } from "./class/Line";
+import { Group } from "./class/Group";
+import { Table } from "./class/Table"
+import { PointITrell } from "./class/Point_I_Trell"
 
 const COLORS = [
 	'0xC7F595',
@@ -55,7 +57,22 @@ function createPointTable({
 
 	scene.add(pointTable);
 }
+function createPointITrel(name, x, z, points) {
+	const trel = new THREE.Mesh( 
+		new THREE.BoxGeometry( 3.0, 0.5, 4 ), 
+		new THREE.MeshLambertMaterial({ color: 0xFCBA03 }) 
+	);
+	const index = name.replace(/\D/g, "");
 
+	trel.name = name;
+	trel.position.set(x, 0, z);
+
+	trel.rotateY(1.56);
+
+	trel.userData = new PointITrell(THREE, scene, index, name, x, z, points);
+	
+	scene.add(trel);
+}
 function createTrel(name, x, z, groups) {
 	const trel = new THREE.Mesh( 
 		new THREE.BoxGeometry( 3.0, 0.5, 4 ), 
@@ -75,7 +92,7 @@ function createTrel(name, x, z, groups) {
 function createLine({
 	id, 
 	car, 
-	length, 
+	capacity, 
 	columnPosition, 
 	groupPosition,
 	groupRotation = Math.PI / 2,
@@ -88,16 +105,19 @@ function createLine({
 	const group = new THREE.Group();
 	let occupied = 0;
 
-	for (let i = 0; i < length; i++) {
+	for (let i = 0; i < capacity; i++) {
 		const table = new THREE.Mesh( 
 			new THREE.BoxGeometry( 3.0, 0.5, 4 ), 
 			new THREE.MeshLambertMaterial({ color: 0xB3AFAF }) 
 		);
+		
+		const tableName = `TABLE_${i < 10 ? '0' : ''}${i}`;
+		let carName = null;
 
-		table.name = `${id}_ME_${i < 10 ? '0' : ''}${i}`
+		table.name = tableName;
 		table.position.set(columnPosition, 0 , i * spaceBetweenTable);
 		table.rotation.y = tableRotation ? tableRotation : table.rotation.y;
-
+			
 		if ([true, false][Math.floor(Math.random() * 2)] && !empty) {
 			const model = car.scene.clone();
 
@@ -114,7 +134,9 @@ function createLine({
 
 			material.color.setHex(COLORS[Math.floor(Math.random() * COLORS.length)]);
 
-			model.name = `${id}_CAR_${i < 10 ? '0' : ''}${i}`;
+			carName = `CAR_${i < 10 ? '0' : ''}${i}`;
+
+			model.name = carName;
 
 			model.getObjectByName('Cube').material = material;
 
@@ -123,13 +145,15 @@ function createLine({
 			occupied++;
 		}
 
+		table.userData = new Table(THREE, scene, i, tableName, id, carName, carName === null);
+
 		group.add(table);
 	}
 
 	group.name = id;
 	group.rotation.y = groupRotation;
 	group.position.x = groupPosition;
-	group.userData = new Line(THREE, scene, id, length, occupied, occupied === 0, point);
+	group.userData = new Group(THREE, scene, id, capacity, occupied, occupied === 0, point);
 
 	if (invert) group.children.reverse();
 
@@ -176,35 +200,51 @@ function init() {
 	const loader = new GLTFLoader();
 
 	loader.load(carUrl.href, (car) => {
-		createLine({ id: "GROUP_1",  car, length: 24, columnPosition: 0, groupPosition: -50 });
-		createLine({ id: "GROUP_2", car, length: 24, columnPosition: 8, groupPosition: -50 });
-		createLine({ id: "GROUP_3", car, length: 24, columnPosition: 16, groupPosition: -50 });
-		createLine({ id: "GROUP_4", car, length: 24, columnPosition: 24, groupPosition: -50 });
-		createLine({ id: "GROUP_5", car, length: 9, columnPosition: 32, groupPosition: 25 });
-		createLine({ id: "GROUP_6", car, length: 9, columnPosition: 40, groupPosition: 25 });
-		createLine({ id: "GROUP_7", car, length: 9, columnPosition: 48, groupPosition: 25 });
-		createLine({ id: "GROUP_8", car, length: 9, columnPosition: 56, groupPosition: 25 });
-		createLine({ id: "MS_HALL", car, length: 10, columnPosition: 0, groupPosition: 79, groupRotation: 9.43, spaceBetweenTable: 6, empty: true, point: "PK" });
-		createLine({ id: "PK_HALL", car, length: 23, columnPosition: 65, groupPosition: -40, tableRotation: 3.15, empty: true, invert: true });
+		createLine({ id: "GROUP_1",  car, capacity: 24, columnPosition: 0, groupPosition: -50 });
+		createLine({ id: "GROUP_2", car, capacity: 24, columnPosition: 8, groupPosition: -50 });
+		createLine({ id: "GROUP_3", car, capacity: 24, columnPosition: 16, groupPosition: -50 });
+		createLine({ id: "GROUP_4", car, capacity: 24, columnPosition: 24, groupPosition: -50 });
+		createLine({ id: "GROUP_5", car, capacity: 9, columnPosition: 32, groupPosition: 25 });
+		createLine({ id: "GROUP_6", car, capacity: 9, columnPosition: 40, groupPosition: 25 });
+		createLine({ id: "GROUP_7", car, capacity: 9, columnPosition: 48, groupPosition: 25 });
+		createLine({ id: "GROUP_8", car, capacity: 9, columnPosition: 56, groupPosition: 25 });
+		
+		createLine({ id: "POINT_I_HALL", car, capacity: 11, columnPosition: 56, groupPosition: -50, empty: true });
+		createLine({ id: "MS_HALL", car, capacity: 10, columnPosition: 0, groupPosition: 79, groupRotation: 9.43, spaceBetweenTable: 6, empty: true, point: "PK" });
+		createLine({ id: "PK_HALL", car, capacity: 23, columnPosition: 65, groupPosition: -40, tableRotation: 3.15, empty: true, invert: true });
+
+		createPointTable({ id: "POINT_I", x: -56, z: -56, hall: "POINT_I_HALL" });
+
+		createPointTable({ id: "ME_01", x: -56, z: -8, hall: "GROUP_1" });
+		createPointTable({ id: "ME_02", x: -56, z: -24, hall: "GROUP_3" });
+		createPointTable({ id: "ME_03", x: 18, z: -40, hall: "GROUP_5" });
+		createPointTable({ id: "ME_04", x: 18, z: -56, hall: "GROUP_7" });
 
 		createPointTable({ id: "MS_01", x: 72, z: -8, hall: "MS_HALL", ms: { range: 1, startAt: 0 } });
 		createPointTable({ id: "MS_02", x: 72, z: -24, hall: "MS_HALL", ms: { range: 4, startAt: 3 } });
 		createPointTable({ id: "MS_03", x: 72, z: -40, hall: "MS_HALL", ms: { range: 7, startAt: 6 } });
 		createPointTable({ id: "MS_04", x: 72, z: -56, hall: "MS_HALL", ms: { range: 10, startAt: 9 } });
+		
+
 		createPointTable({ id: "PK", x: 78.4, z: -65, rotation: Math.PI / -2, hall: "PK_HALL", ms: { range: 1, startAt: 0 } });
+
+		createPointITrel("TREL_POINT_I", 5, -56, ["ME_03", "ME_04"]);
 
 		createTrel("TREL_01", -50, -4, ["GROUP_1", "GROUP_2"]);
 		createTrel("TREL_02", -50, -20, ["GROUP_3", "GROUP_4"]);
 		createTrel("TREL_03", 25, -36, ["GROUP_5", "GROUP_6"]);
 		createTrel("TREL_04", 25, -52, ["GROUP_7", "GROUP_8"]);
 		
-		setTimeout(() => {
-			for (const name of ["TREL_01", "TREL_02", "TREL_03", "TREL_04"]) {
-				const trel = scene.getObjectByName(name);
 		
-				trel.userData.requestJob();
-			}
-		}, 2000)
+		/*for (const name of ["TREL_01", "TREL_02", "TREL_03", "TREL_04"]) {
+			const trel = scene.getObjectByName(name);
+	
+			trel.userData.requestJob();
+		}*/
+		const trel = scene.getObjectByName("TREL_POINT_I");
+		
+		trel.userData.requestJob();
+
 	}, undefined, function(error) {
 		console.log(error)
 	});

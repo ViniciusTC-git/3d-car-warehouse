@@ -6,9 +6,11 @@ export class Trel {
     #x: number;
     #z: number;
     #groups: string[];
+    #empty: boolean = true;
     #lastGroup: string;
-    #lastTarget: string;
+    #lastTable: string;
     #lastPoint: string;
+    #lastCarBody: string;
     #job: any;
 
     constructor(
@@ -58,20 +60,36 @@ export class Trel {
         return this.#lastGroup;
     }
 
-    get lastTarget() {
-        return this.#lastTarget;
+    get lastTable() {
+        return this.#lastTable;
     }
 
     get lastPoint() {
         return this.#lastPoint;
     }
 
+    get empty() {
+        return this.#empty;
+    }
+
+    get lastCarBody() {
+        return this.#lastCarBody;
+    }
+
+    set lastCarBody(lastCarBody: string) {
+        this.#lastCarBody = lastCarBody;
+    }
+
+    set empty(empty: boolean) {
+        this.#empty = empty;
+    }
+
     set lastGroup(lastGroup: string) {
         this.#lastGroup = lastGroup;
     }
 
-    set lastTarget(lastTarget: string) {
-        this.#lastTarget = lastTarget;
+    set lastTable(lastTable: string) {
+        this.#lastTable = lastTable;
     }
 
     set lastPoint(lastPoint: string) {
@@ -103,13 +121,13 @@ export class Trel {
         const randomCell = cells[Math.floor(Math.random() * cells.length)].name;
     
         this.lastGroup = randomGroup;
-        this.lastTarget = randomCell;
+        this.lastTable = randomCell;
 
-        this.startJob('moveToTarget');
+        this.startJob('moveToTable');
     }
 
-    private moveToTarget() {
-        const me = this.scene.getObjectByName(this.lastGroup).getObjectByName(this.lastTarget);
+    private moveToTable() {
+        const me = this.scene.getObjectByName(this.lastGroup).getObjectByName(this.lastTable);
         const trel = this.scene.getObjectByName(this.name);
 
         me.material.color.setHex(trel.children.length ? 0xDE9B16 : 0x68D7F2);
@@ -161,21 +179,25 @@ export class Trel {
         this.clearJob();
 
         const trel = this.scene.getObjectByName(this.name);
-        const me = this.scene.getObjectByName(this.lastGroup).getObjectByName(this.lastTarget);
+        const me = this.scene.getObjectByName(this.lastGroup).getObjectByName(this.lastTable);
         const carBody = me.children[0].clone();
 
         me.clear();
 
         trel.add(carBody);
+
+        this.empty = false;
+        this.lastCarBody = carBody.name;
        
         me.material.color.setHex(0xB3AFAF);
 
         this.lastPoint = `MS_${this.id}`;
 
         const group = this.scene.getObjectByName(this.lastGroup);
-
-        group.userData.occupied -= 1;
-        group.userData.empty = group.userData.occupied === 0
+        
+        me.userData.empty = true;
+        group.userData.tablesOccupied -= 1;
+        group.userData.empty = group.userData.tablesOccupied === 0
 
         this.startJob('moveToPoint');
     }
@@ -191,6 +213,8 @@ export class Trel {
         const carBody = trel.children[0].clone();
 
         trel.clear();
+
+        this.empty = true;
 
         point.add(carBody);
 
