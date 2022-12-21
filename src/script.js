@@ -7,6 +7,7 @@ import { PointTable } from "./class/PointTable";
 import { Group } from "./class/Group";
 import { Table } from "./class/Table"
 import { PointITrell } from "./class/Point_I_Trell"
+import { Car } from './class/Car';
 
 const COLORS = [
 	'0xC7F595',
@@ -41,9 +42,10 @@ function createPointTable({
 	id, 
 	x, 
 	z, 
-	hall = null, 
+	hall = [], 
 	ms = {},
-	rotation = Math.PI / 2
+	rotation = Math.PI / 2,
+	car = null
 }) {
 	const geometry = new THREE.CylinderGeometry( 2.5, 2.5, 0.5, 32);
 	const material = new THREE.MeshStandardMaterial( { color: 0xB3AFAF, side: THREE.DoubleSide } );
@@ -53,41 +55,74 @@ function createPointTable({
 	pointTable.position.set(x, 0, z);
 	pointTable.rotation.y = rotation;
 
-	pointTable.userData = new PointTable(THREE, scene, id, hall, ms);
+	pointTable.userData = new PointTable(THREE, scene, id, hall, ms, car ? car.scene.clone() : car);
 
 	scene.add(pointTable);
 }
-function createPointITrel(name, x, z, points) {
+function createPointITrel({ 
+	id, 
+	name, 
+	x, 
+	z, 
+	points 
+}) {
 	const trel = new THREE.Mesh( 
 		new THREE.BoxGeometry( 3.0, 0.5, 4 ), 
 		new THREE.MeshLambertMaterial({ color: 0xFCBA03 }) 
 	);
-	const index = name.replace(/\D/g, "");
 
 	trel.name = name;
 	trel.position.set(x, 0, z);
 
 	trel.rotateY(1.56);
 
-	trel.userData = new PointITrell(THREE, scene, index, name, x, z, points);
+	trel.userData = new PointITrell(THREE, scene, id, name, x, z, points);
 	
 	scene.add(trel);
 }
-function createTrel(name, x, z, groups) {
+function createTrel({ id, name, x, z, groups }) {
 	const trel = new THREE.Mesh( 
 		new THREE.BoxGeometry( 3.0, 0.5, 4 ), 
 		new THREE.MeshLambertMaterial({ color: 0xFCBA03 }) 
 	);
-	const index = name.replace(/\D/g, "");
 
 	trel.name = name;
 	trel.position.set(x, 0, z);
 
 	trel.rotateY(1.56);
 
-	trel.userData = new Trel(THREE, scene, index, name, x, z, groups);
+	trel.userData = new Trel(THREE, scene, id, name, x, z, groups);
 	
 	scene.add(trel);
+}
+function createRandomCar({ 
+	model, 
+	id, 
+	name, 
+	status, 
+	hall, 
+	cell, 
+	point 
+}) {
+	model.children[1].visible = false;
+	model.children[2].visible = false;
+	model.children[3].visible = false;
+	model.children[0].children[1].visible = false;
+	model.children[0].children[2].visible = false;
+	model.children[0].children[3].visible = false;
+	model.children[0].children[4].visible = false;
+	model.children[0].children[5].visible = false;
+
+	const material = model.getObjectByName('Cube').material.clone();
+
+	material.color.setHex(COLORS[Math.floor(Math.random() * COLORS.length)]);
+
+	model.getObjectByName('Cube').material = material;
+
+	model.name = name;
+	model.userData = new Car(id, name, status, hall, cell, point);
+
+	return model;
 }
 function createLine({
 	id, 
@@ -119,28 +154,17 @@ function createLine({
 		table.rotation.y = tableRotation ? tableRotation : table.rotation.y;
 			
 		if ([true, false][Math.floor(Math.random() * 2)] && !empty) {
-			const model = car.scene.clone();
-
-			model.children[1].visible = false;
-			model.children[2].visible = false;
-			model.children[3].visible = false;
-			model.children[0].children[1].visible = false;
-			model.children[0].children[2].visible = false;
-			model.children[0].children[3].visible = false;
-			model.children[0].children[4].visible = false;
-			model.children[0].children[5].visible = false;
-
-			const material = model.getObjectByName('Cube').material.clone();
-
-			material.color.setHex(COLORS[Math.floor(Math.random() * COLORS.length)]);
-
 			carName = `CAR_${i < 10 ? '0' : ''}${i}`;
 
-			model.name = carName;
-
-			model.getObjectByName('Cube').material = material;
-
-			table.add(model);
+			table.add(createRandomCar({
+				model: car.scene.clone(),
+				id: i,
+				name: carName,
+				hall: id,
+				cell: tableName,
+				point: null,
+				status: "idle"
+			}));
 
 			occupied++;
 		}
@@ -167,7 +191,6 @@ function init() {
 
 	document.body.appendChild(render.domElement);
 
-	
 	const camera = new THREE.PerspectiveCamera(
 		30,
 		window.innerWidth / window.innerHeight,
@@ -200,7 +223,7 @@ function init() {
 	const loader = new GLTFLoader();
 
 	loader.load(carUrl.href, (car) => {
-		createLine({ id: "GROUP_1",  car, capacity: 24, columnPosition: 0, groupPosition: -50 });
+		createLine({ id: "GROUP_1", car, capacity: 24, columnPosition: 0, groupPosition: -50 });
 		createLine({ id: "GROUP_2", car, capacity: 24, columnPosition: 8, groupPosition: -50 });
 		createLine({ id: "GROUP_3", car, capacity: 24, columnPosition: 16, groupPosition: -50 });
 		createLine({ id: "GROUP_4", car, capacity: 24, columnPosition: 24, groupPosition: -50 });
@@ -209,41 +232,41 @@ function init() {
 		createLine({ id: "GROUP_7", car, capacity: 9, columnPosition: 48, groupPosition: 25 });
 		createLine({ id: "GROUP_8", car, capacity: 9, columnPosition: 56, groupPosition: 25 });
 		
-		createLine({ id: "POINT_I_HALL", car, capacity: 11, columnPosition: 56, groupPosition: -50, empty: true });
+		createLine({ id: "POINT_I_HALL", car, capacity: 11, columnPosition: 56, groupPosition: -50, empty: true, point: "TREL_POINT_I" });
 		createLine({ id: "MS_HALL", car, capacity: 10, columnPosition: 0, groupPosition: 79, groupRotation: 9.43, spaceBetweenTable: 6, empty: true, point: "PK" });
 		createLine({ id: "PK_HALL", car, capacity: 23, columnPosition: 65, groupPosition: -40, tableRotation: 3.15, empty: true, invert: true });
 
-		createPointTable({ id: "POINT_I", x: -56, z: -56, hall: "POINT_I_HALL" });
+		createPointTable({ id: "POINT_I", x: -56, z: -56, hall: ["POINT_I_HALL"], ms: { range: 1, startAt: 0 }, car });
 
-		createPointTable({ id: "ME_01", x: -56, z: -8, hall: "GROUP_1" });
-		createPointTable({ id: "ME_02", x: -56, z: -24, hall: "GROUP_3" });
-		createPointTable({ id: "ME_03", x: 18, z: -40, hall: "GROUP_5" });
-		createPointTable({ id: "ME_04", x: 18, z: -56, hall: "GROUP_7" });
+		createPointTable({ id: "ME_01", x: -56, z: -8, hall: ["GROUP_1", "GROUP_2"] });
+		createPointTable({ id: "ME_02", x: -56, z: -24, hall: ["GROUP_3", "GROUP_4"]});
+		createPointTable({ id: "ME_03", x: 18, z: -40, hall: ["GROUP_5", "GROUP_6"] });
+		createPointTable({ id: "ME_04", x: 18, z: -56, hall: ["GROUP_7", "GROUP_8"] });
 
-		createPointTable({ id: "MS_01", x: 72, z: -8, hall: "MS_HALL", ms: { range: 1, startAt: 0 } });
-		createPointTable({ id: "MS_02", x: 72, z: -24, hall: "MS_HALL", ms: { range: 4, startAt: 3 } });
-		createPointTable({ id: "MS_03", x: 72, z: -40, hall: "MS_HALL", ms: { range: 7, startAt: 6 } });
-		createPointTable({ id: "MS_04", x: 72, z: -56, hall: "MS_HALL", ms: { range: 10, startAt: 9 } });
+		createPointTable({ id: "MS_01", x: 72, z: -8, hall: ["MS_HALL"], ms: { range: 1, startAt: 0 } });
+		createPointTable({ id: "MS_02", x: 72, z: -24, hall: ["MS_HALL"], ms: { range: 4, startAt: 3 } });
+		createPointTable({ id: "MS_03", x: 72, z: -40, hall: ["MS_HALL"], ms: { range: 7, startAt: 6 } });
+		createPointTable({ id: "MS_04", x: 72, z: -56, hall: ["MS_HALL"], ms: { range: 10, startAt: 9 } });
 		
+		createPointTable({ id: "PK", x: 78.4, z: -65, rotation: Math.PI / -2, hall: ["PK_HALL"], ms: { range: 1, startAt: 0 } });
 
-		createPointTable({ id: "PK", x: 78.4, z: -65, rotation: Math.PI / -2, hall: "PK_HALL", ms: { range: 1, startAt: 0 } });
+		createPointITrel({ id: 1, name: "TREL_POINT_I", x: 5, z: -56, points: ["ME_03", "ME_04"] });
 
-		createPointITrel("TREL_POINT_I", 5, -56, ["ME_03", "ME_04"]);
-
-		createTrel("TREL_01", -50, -4, ["GROUP_1", "GROUP_2"]);
-		createTrel("TREL_02", -50, -20, ["GROUP_3", "GROUP_4"]);
-		createTrel("TREL_03", 25, -36, ["GROUP_5", "GROUP_6"]);
-		createTrel("TREL_04", 25, -52, ["GROUP_7", "GROUP_8"]);
+		createTrel({ id: 1, name: "TREL_01", x: -50, z: -4, groups: ["GROUP_1", "GROUP_2"] });
+		createTrel({ id: 2, name: "TREL_02", x: -50, z: -20, groups: ["GROUP_3", "GROUP_4"] });
+		createTrel({ id: 3, name: "TREL_03", x: 25, z: -36, groups: ["GROUP_5", "GROUP_6"] });
+		createTrel({ id: 4, name: "TREL_04", x: 25, z: -52, groups: ["GROUP_7", "GROUP_8"] });
 		
 		
-		/*for (const name of ["TREL_01", "TREL_02", "TREL_03", "TREL_04"]) {
+		for (const name of [/*"TREL_01", "TREL_02",*/ "TREL_03", "TREL_04"]) {
 			const trel = scene.getObjectByName(name);
 	
-			trel.userData.requestJob();
-		}*/
-		const trel = scene.getObjectByName("TREL_POINT_I");
-		
-		trel.userData.requestJob();
+			trel.userData.startJob('requestJob');
+		}
+
+		const point = scene.getObjectByName("POINT_I");
+
+		point.userData.randomCar();
 
 	}, undefined, function(error) {
 		console.log(error)

@@ -9,11 +9,11 @@ export class PointITrell {
     #empty: boolean = true;
     #lastPoint: string;
     #lastCarBody: string;
-    #job: any;
+    #job: any = [];
 
     constructor(
         THREE: any,
-        scene: string,
+        scene: any,
         id: number, 
         name: string, 
         x: number, 
@@ -27,7 +27,6 @@ export class PointITrell {
         this.#x = x;
         this.#z = z;
         this.#points = points;
-        this.#job = null;
     }
 
     get scene() {
@@ -78,20 +77,30 @@ export class PointITrell {
         this.#lastPoint = lastPoint;
     }
 
-    private startJob(name: any, time: number = 2000) {
-        this.#job = setInterval(() => this[name](), time);
+    private hasJobPending(jobId: number) {
+        const fifo = Object.keys(this.#job).map((index: string) => +index) as number[];
+        
+        return !fifo.length ? false : Math.min(...fifo) < jobId;
     }
 
     private clearJob() {
-        clearInterval(this.#job);
+        clearInterval(this.#job[0]);
 
-        this.#job = null;
+        this.#job.shift();
     }
 
-    public onAddToPoint() {
+    public startJob(name: any, time: number = 2000) {
+        this.#job.push(setInterval(() => this[name](), time))
+    }
+
+    private checkForFreeTable() {
+        this.requestJob();
+    }
+
+    public onAddToTable() {
         this.clearJob();
 
-        const trel =  this.scene.getObjectByName(this.name);
+        const trel = this.scene.getObjectByName(this.name);
         const point = this.scene.getObjectByName(this.lastPoint);
 
         point.userData.empty = false;
@@ -100,15 +109,13 @@ export class PointITrell {
 
         trel.clear();
 
-        this.empty = true;
-
         point.add(carBody);
 
-        /*setTimeout(() => {
-            point.userData.startJob('checkForFreeTable');
+        point.userData.introductionRequest();
 
-            this.requestJob();
-        }, 2000);*/
+        carBody.userData.status = "idle";
+
+        this.startJob('moveToPointIHall');
     }
 
     private moveToPointIHall() {
@@ -120,24 +127,25 @@ export class PointITrell {
         
         if (trelX === originX) {
             if (trelZ === originZ) {
-                console.log('center');
+                this.empty = true;
+                this.clearJob();
             } else {
                 if (originZ > trelZ) {
-                    trel.position.z = trel.position.z + 5
+                    trel.position.z += 5;
                 } else {
-                    trel.position.z = trel.position.z - 5
+                    trel.position.z -= 5;
                 }
             }
         } else {
             if (originX > trelX) {
-                trel.position.x = trel.position.x + 5
+                trel.position.x += + 5;
             } else {
-                trel.position.x = trel.position.x - 5
+                trel.position.x -= 5;
             }
         }
     }
 
-    private moveToPoint() {
+    private moveToTable() {
         const trel = this.scene.getObjectByName(this.name);
         const point = this.scene.getObjectByName(this.lastPoint);
     
@@ -152,36 +160,35 @@ export class PointITrell {
         ) {
             if (trelX >= (pointX - 6) && (trelX - 6) <= pointX) {
                 this.clearJob();
-                this.startJob('moveToPointIHall');
+                this.onAddToTable();
             } else {
                 if (pointX > trelX) {
-                    trel.position.x = trel.position.x + 5
+                    trel.position.x += 5;
                 } else {
-                    trel.position.x = trel.position.x - 5
+                    trel.position.x -= 5;
                 }
             }
-            /*if (!point.userData.empty) return;
-
-            this.onAddToPoint();*/
         } else {
-            trel.position.z = trel.position.z + 5 
+            trel.position.z += 5;
         }
     }
 
     public requestJob() {
+        this.clearJob();
+        
         const trel = this.scene.getObjectByName(this.name);
-        const pointsNames = this.points.filter((point) => this.scene.getObjectByName(point).userData.empty);
+        const meNames = this.points.filter((me: string) => this.scene.getObjectByName(me).userData.empty);
 
-        if (!pointsNames.length) {
+        if (!meNames.length) {
             trel.position.x = this.x;
     
             return;
         }
     
-        const randomPoint = pointsNames[Math.floor(Math.random() * pointsNames.length)];
+        const randomMe = meNames[Math.floor(Math.random() * meNames.length)];
 
-        this.lastPoint = randomPoint;
+        this.lastPoint = randomMe;
 
-        this.startJob('moveToPoint');
+        this.startJob('moveToTable');
     }
 }

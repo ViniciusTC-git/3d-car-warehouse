@@ -9,7 +9,7 @@ export class Table {
 
     constructor(
         THREE: any,
-        scene: string,
+        scene: any,
         id: number, 
         name: string, 
         group: string,

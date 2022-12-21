@@ -12,10 +12,17 @@ export class Trel {
     #lastPoint: string;
     #lastCarBody: string;
     #job: any;
+    #requests: { 
+        type: "introduction" | "extraction", 
+        group: string, 
+        cell: string, 
+        point: string,
+        started: boolean
+    }[] = [];
 
     constructor(
         THREE: any,
-        scene: string,
+        scene: any,
         id: number, 
         name: string, 
         x: number, 
@@ -76,6 +83,14 @@ export class Trel {
         return this.#lastCarBody;
     }
 
+    get requests() {
+        return this.#requests;
+    }
+
+    set requests(requests: any[]) {
+        this.#requests = requests;
+    }
+
     set lastCarBody(lastCarBody: string) {
         this.#lastCarBody = lastCarBody;
     }
@@ -107,40 +122,37 @@ export class Trel {
     }
 
     private requestJob() {
-        const trel = this.scene.getObjectByName(this.name);
-        const groupsNames = this.groups.filter((group) => !this.scene.getObjectByName(group).userData.empty);
-    
-        if (!groupsNames.length) {
-            trel.position.x = this.x;
-    
-            return;
-        }
-    
-        const randomGroup = groupsNames[Math.floor(Math.random() * groupsNames.length)];
-        const cells = this.scene.getObjectByName(randomGroup).children.filter((children: any) => children.children.length);
-        const randomCell = cells[Math.floor(Math.random() * cells.length)].name;
-    
-        this.lastGroup = randomGroup;
-        this.lastTable = randomCell;
+        if(
+            this.requests.length && 
+            !this.requests[0].started
+        ) {
+            this.requests[0].started = true;
+            this.lastPoint = this.requests[0].point;
+            this.lastGroup = this.requests[0].group;
+            this.lastTable = this.requests[0].cell;
 
-        this.startJob('moveToTable');
+            if (this.requests[0].type === 'introduction') {
+                this.startJob('moveToTable');
+            } else {
+                this.startJob('moveToCell');
+            }
+        }   
     }
 
-    private moveToTable() {
+    private moveToCell() {
         const me = this.scene.getObjectByName(this.lastGroup).getObjectByName(this.lastTable);
         const trel = this.scene.getObjectByName(this.name);
-
-        me.material.color.setHex(trel.children.length ? 0xDE9B16 : 0x68D7F2);
-
         const trelX = Math.round(trel.getWorldPosition(new this.THREE.Vector3()).x);
         const meX = Math.round(me.getWorldPosition(new this.THREE.Vector3()).x);
 
-        /*if (trelId.includes("01")) {
-            console.log(`${trelId}: ${trelX}`, `[${groupId}]${targetId}:${meX}`)
-        }*/
+        //console.log(`${this.name}: ${trelX}`, `[${me.name}]: ${meX}`)
 
         if (meX === trelX) {
-            this.onGrabCar();
+            if (this.requests[0].type === 'introduction') {
+                this.onAddToTable();
+            } else {
+                this.onGrabCar();
+            }
         } else {
             if (meX > trelX) {
                 trel.position.x = trel.position.x + 5;
@@ -150,22 +162,22 @@ export class Trel {
         }
     }
 
-    private moveToPoint() {
+    private moveToTable() {
         const trel = this.scene.getObjectByName(this.name);
-        const point = this.scene.getObjectByName(this.lastPoint);
-    
+        const point = this.scene.getObjectByName(this.lastPoint); 
         const trelX = Math.round(trel.getWorldPosition(new this.THREE.Vector3()).x);
         const pointX = Math.round(point.getWorldPosition(new this.THREE.Vector3()).x);
-    
-        /*if (trelId.includes("01")) {
-            console.log(`${trelId}: ${trelX}`, `${pointId}:${pointX}`)
-        }*/
-    
-        if (trelX >= (pointX - 2) && trelX <= pointX) {
-    
-            if (!point.userData.empty) return;
 
-            this.onAddToPoint();
+        //console.log(`${this.name}: ${trelX}`, `[${point.name}]: ${pointX}`)
+        
+        if (trelX >= (pointX - 2) && trelX <= (pointX + 3)) {
+            if (this.requests[0].type === "introduction") {
+                this.onGrabCar();
+            } else {
+                if (!point.userData.empty) return;
+
+                this.onAddToTable();
+            }
         } else {
             if (pointX > trelX) {
                 trel.position.x = trel.position.x + 5
@@ -178,37 +190,59 @@ export class Trel {
     public onGrabCar() {
         this.clearJob();
 
-        const trel = this.scene.getObjectByName(this.name);
-        const me = this.scene.getObjectByName(this.lastGroup).getObjectByName(this.lastTable);
-        const carBody = me.children[0].clone();
+        const { type } = this.requests[0];
 
-        me.clear();
+        const trel = this.scene.getObjectByName(this.name);
+        const target = (
+            type === 'introduction' ? 
+            this.scene.getObjectByName(this.lastPoint) :
+            this.scene.getObjectByName(this.lastGroup).getObjectByName(this.lastTable)
+        );
+        const carBody = target.children[0].clone();
+
+        target.clear();
+
+        target.userData.empty = true;
 
         trel.add(carBody);
 
+        carBody.userData.status = 'moving';
+
         this.empty = false;
         this.lastCarBody = carBody.name;
-       
-        me.material.color.setHex(0xB3AFAF);
-
-        this.lastPoint = `MS_${this.id}`;
 
         const group = this.scene.getObjectByName(this.lastGroup);
-        
-        me.userData.empty = true;
-        group.userData.tablesOccupied -= 1;
-        group.userData.empty = group.userData.tablesOccupied === 0
 
-        this.startJob('moveToPoint');
+        if (type === 'extraction') {
+            target.material.color.setHex(0xB3AFAF);
+
+            group.userData.tablesOccupied -= 1;
+            group.userData.empty = group.userData.tablesOccupied === 0;
+
+            this.startJob('moveToTable');
+        } else {
+            group.userData.tablesOccupied += 1;
+            group.userData.empty = group.userData.tablesOccupied === 0;
+
+            this.scene.getObjectByName(this.lastGroup).getObjectByName(this.lastTable).material.color.setHex(0x32A852);
+
+            this.startJob('moveToCell');
+        }
     }
 
-    public onAddToPoint() {
+    public onAddToTable() {
         this.clearJob();
 
-        const trel =  this.scene.getObjectByName(this.name);
-        const point = this.scene.getObjectByName(this.lastPoint);
+        const { type } = this.requests[0];
 
-        point.userData.empty = false;
+        const trel = this.scene.getObjectByName(this.name);
+        const target = (
+            type === 'introduction' ? 
+            this.scene.getObjectByName(this.lastGroup).getObjectByName(this.lastTable) :
+            this.scene.getObjectByName(this.lastPoint) 
+        );
+
+        target.userData.empty = false;
 
         const carBody = trel.children[0].clone();
 
@@ -216,13 +250,18 @@ export class Trel {
 
         this.empty = true;
 
-        point.add(carBody);
+        target.add(carBody);
 
-        setTimeout(() => {
-            point.userData.startJob('checkForFreeTable');
+        carBody.userData.status = 'idle';
 
-            this.requestJob();
-        }, 2000);
+        this.requests.shift();
+
+        if (type === 'extraction') {
+            target.userData.startJob('checkForFreeTable');
+        } else {
+            target.material.color.setHex(0xB3AFAF);
+        }
+
     }
 
 

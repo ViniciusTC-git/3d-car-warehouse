@@ -99,6 +99,8 @@ export class Group {
 
         point.add(carBody);
 
+        carBody.userData.status = "idle";
+        
         point.userData.empty = false;
 
         setTimeout(() => {
