@@ -174,17 +174,12 @@ export class PointITrell {
     }
 
     public requestJob() {
-        this.clearJob();
-        
-        const trel = this.scene.getObjectByName(this.name);
         const meNames = this.points.filter((me: string) => this.scene.getObjectByName(me).userData.empty);
 
-        if (!meNames.length) {
-            trel.position.x = this.x;
-    
-            return;
-        }
-    
+        if (!meNames.length) return;
+
+        this.clearJob();
+
         const randomMe = meNames[Math.floor(Math.random() * meNames.length)];
 
         this.lastPoint = randomMe;

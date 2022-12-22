@@ -131,15 +131,21 @@ export class Trel {
             this.lastGroup = this.requests[0].group;
             this.lastTable = this.requests[0].cell;
 
+            const dest = this.scene.getObjectByName(this.lastGroup).getObjectByName(this.lastTable);
+
             if (this.requests[0].type === 'introduction') {
+                dest.material.color.setHex(0x76E072);
                 this.startJob('moveToTable');
             } else {
+                dest.material.color.setHex(0x68D7F2);
                 this.startJob('moveToCell');
             }
         }   
     }
 
     private moveToCell() {
+        const { type } = this.requests[0];
+
         const me = this.scene.getObjectByName(this.lastGroup).getObjectByName(this.lastTable);
         const trel = this.scene.getObjectByName(this.name);
         const trelX = Math.round(trel.getWorldPosition(new this.THREE.Vector3()).x);
@@ -214,8 +220,6 @@ export class Trel {
         const group = this.scene.getObjectByName(this.lastGroup);
 
         if (type === 'extraction') {
-            target.material.color.setHex(0xB3AFAF);
-
             group.userData.tablesOccupied -= 1;
             group.userData.empty = group.userData.tablesOccupied === 0;
 
@@ -223,8 +227,6 @@ export class Trel {
         } else {
             group.userData.tablesOccupied += 1;
             group.userData.empty = group.userData.tablesOccupied === 0;
-
-            this.scene.getObjectByName(this.lastGroup).getObjectByName(this.lastTable).material.color.setHex(0x32A852);
 
             this.startJob('moveToCell');
         }
@@ -241,7 +243,8 @@ export class Trel {
             this.scene.getObjectByName(this.lastGroup).getObjectByName(this.lastTable) :
             this.scene.getObjectByName(this.lastPoint) 
         );
-
+        const dest = this.scene.getObjectByName(this.lastGroup).getObjectByName(this.lastTable);
+        
         target.userData.empty = false;
 
         const carBody = trel.children[0].clone();
@@ -256,12 +259,11 @@ export class Trel {
 
         this.requests.shift();
 
+        dest.material.color.setHex(0xB3AFAF);
+        
         if (type === 'extraction') {
             target.userData.startJob('checkForFreeTable');
-        } else {
-            target.material.color.setHex(0xB3AFAF);
-        }
-
+        } 
     }
 
 

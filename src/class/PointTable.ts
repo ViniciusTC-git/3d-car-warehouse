@@ -112,8 +112,19 @@ export class PointTable {
         const tablesToCheck = hall.children.slice(0, range);
 
         const occupied = tablesToCheck.some((table: any) => !table.userData.empty);
+       
+        if (this.name.includes("MS")) {
+            const isSequence = this.scene.userData.sequences[0]?.carId === this.scene.getObjectByName(this.name).children[0].name;
+
+            if (!isSequence) return;
+        }
 
         if (!occupied && !this.hasJobPending(jobId)) {
+            
+            if (this.name.includes("MS")) {
+                this.scene.userData.sequences.shift();
+            }
+
             const point = this.scene.getObjectByName(this.name);
             const carBody = point.children[0].clone();
 
@@ -163,6 +174,6 @@ export class PointTable {
             point.add(model);
     
             this.startJob('checkForFreeTable');
-        }, 5000)
+        }, 35000)
     }
 }

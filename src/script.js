@@ -135,10 +135,15 @@ function createLine({
 	empty = false,
 	tableRotation,
 	point = null,
-	invert = false
+	invert = false,
+	tableStyle = {},
 }) {
 	const group = new THREE.Group();
 	let occupied = 0;
+
+	group.name = id;
+	group.rotation.y = groupRotation;
+	group.position.x = groupPosition;
 
 	for (let i = 0; i < capacity; i++) {
 		const table = new THREE.Mesh( 
@@ -151,7 +156,12 @@ function createLine({
 
 		table.name = tableName;
 		table.position.set(columnPosition, 0 , i * spaceBetweenTable);
-		table.rotation.y = tableRotation ? tableRotation : table.rotation.y;
+		table.rotation.y = 
+			tableRotation ? 
+			tableRotation : 
+			tableStyle[i]?.tableRotation ? 
+			tableStyle[i].tableRotation : 
+			table.rotation.y;
 			
 		if ([true, false][Math.floor(Math.random() * 2)] && !empty) {
 			carName = `CAR_${i < 10 ? '0' : ''}${i}`;
@@ -174,9 +184,6 @@ function createLine({
 		group.add(table);
 	}
 
-	group.name = id;
-	group.rotation.y = groupRotation;
-	group.position.x = groupPosition;
 	group.userData = new Group(THREE, scene, id, capacity, occupied, occupied === 0, point);
 
 	if (invert) group.children.reverse();
@@ -223,25 +230,27 @@ function init() {
 	const loader = new GLTFLoader();
 
 	loader.load(carUrl.href, (car) => {
-		createLine({ id: "GROUP_1", car, capacity: 24, columnPosition: 0, groupPosition: -50 });
-		createLine({ id: "GROUP_2", car, capacity: 24, columnPosition: 8, groupPosition: -50 });
-		createLine({ id: "GROUP_3", car, capacity: 24, columnPosition: 16, groupPosition: -50 });
-		createLine({ id: "GROUP_4", car, capacity: 24, columnPosition: 24, groupPosition: -50 });
-		createLine({ id: "GROUP_5", car, capacity: 9, columnPosition: 32, groupPosition: 25 });
-		createLine({ id: "GROUP_6", car, capacity: 9, columnPosition: 40, groupPosition: 25 });
-		createLine({ id: "GROUP_7", car, capacity: 9, columnPosition: 48, groupPosition: 25 });
-		createLine({ id: "GROUP_8", car, capacity: 9, columnPosition: 56, groupPosition: 25 });
+		createLine({ id: "GROUP_01", car, capacity: 24, columnPosition: 0, groupPosition: -50 });
+		createLine({ id: "GROUP_02", car, capacity: 24, columnPosition: 8, groupPosition: -50 });
+		createLine({ id: "GROUP_03", car, capacity: 24, columnPosition: 16, groupPosition: -50 });
+		createLine({ id: "GROUP_04", car, capacity: 24, columnPosition: 24, groupPosition: -50 });
+		createLine({ id: "GROUP_05", car, capacity: 9, columnPosition: 32, groupPosition: 25 });
+		createLine({ id: "GROUP_06", car, capacity: 9, columnPosition: 40, groupPosition: 25 });
+		createLine({ id: "GROUP_07", car, capacity: 9, columnPosition: 48, groupPosition: 25 });
+		createLine({ id: "GROUP_08", car, capacity: 9, columnPosition: 56, groupPosition: 25 });
 		
 		createLine({ id: "POINT_I_HALL", car, capacity: 11, columnPosition: 56, groupPosition: -50, empty: true, point: "TREL_POINT_I" });
 		createLine({ id: "MS_HALL", car, capacity: 10, columnPosition: 0, groupPosition: 79, groupRotation: 9.43, spaceBetweenTable: 6, empty: true, point: "PK" });
 		createLine({ id: "PK_HALL", car, capacity: 23, columnPosition: 65, groupPosition: -40, tableRotation: 3.15, empty: true, invert: true });
 
+		createLine({ id: "INTRODUCTION_HALL_1", car, capacity: 3, columnPosition: 50, groupPosition: -63, empty: true, invert: true });
+
 		createPointTable({ id: "POINT_I", x: -56, z: -56, hall: ["POINT_I_HALL"], ms: { range: 1, startAt: 0 }, car });
 
-		createPointTable({ id: "ME_01", x: -56, z: -8, hall: ["GROUP_1", "GROUP_2"] });
-		createPointTable({ id: "ME_02", x: -56, z: -24, hall: ["GROUP_3", "GROUP_4"]});
-		createPointTable({ id: "ME_03", x: 18, z: -40, hall: ["GROUP_5", "GROUP_6"] });
-		createPointTable({ id: "ME_04", x: 18, z: -56, hall: ["GROUP_7", "GROUP_8"] });
+		createPointTable({ id: "ME_01", x: -56, z: -8, hall: ["GROUP_01", "GROUP_02"] });
+		createPointTable({ id: "ME_02", x: -56, z: -24, hall: ["GROUP_03", "GROUP_04"]});
+		createPointTable({ id: "ME_03", x: 18, z: -40, hall: ["GROUP_05", "GROUP_06"] });
+		createPointTable({ id: "ME_04", x: 18, z: -56, hall: ["GROUP_07", "GROUP_08"] });
 
 		createPointTable({ id: "MS_01", x: 72, z: -8, hall: ["MS_HALL"], ms: { range: 1, startAt: 0 } });
 		createPointTable({ id: "MS_02", x: 72, z: -24, hall: ["MS_HALL"], ms: { range: 4, startAt: 3 } });
@@ -252,22 +261,67 @@ function init() {
 
 		createPointITrel({ id: 1, name: "TREL_POINT_I", x: 5, z: -56, points: ["ME_03", "ME_04"] });
 
-		createTrel({ id: 1, name: "TREL_01", x: -50, z: -4, groups: ["GROUP_1", "GROUP_2"] });
-		createTrel({ id: 2, name: "TREL_02", x: -50, z: -20, groups: ["GROUP_3", "GROUP_4"] });
-		createTrel({ id: 3, name: "TREL_03", x: 25, z: -36, groups: ["GROUP_5", "GROUP_6"] });
-		createTrel({ id: 4, name: "TREL_04", x: 25, z: -52, groups: ["GROUP_7", "GROUP_8"] });
+		createTrel({ id: 1, name: "TREL_01", x: -50, z: -4, groups: ["GROUP_01", "GROUP_02"] });
+		createTrel({ id: 2, name: "TREL_02", x: -50, z: -20, groups: ["GROUP_03", "GROUP_04"] });
+		createTrel({ id: 3, name: "TREL_03", x: 25, z: -36, groups: ["GROUP_05", "GROUP_06"] });
+		createTrel({ id: 4, name: "TREL_04", x: 25, z: -52, groups: ["GROUP_07", "GROUP_08"] });
 		
-		
-		for (const name of [/*"TREL_01", "TREL_02",*/ "TREL_03", "TREL_04"]) {
+		/*
+		for (const name of ["TREL_01", "TREL_02", "TREL_03", "TREL_04"]) {
 			const trel = scene.getObjectByName(name);
 	
 			trel.userData.startJob('requestJob');
 		}
 
+		
 		const point = scene.getObjectByName("POINT_I");
 
 		point.userData.randomCar();
 
+		let sequence = 0;
+
+		setInterval(() => {
+			for (const name of ["TREL_01", "TREL_02", "TREL_03", "TREL_04"]) {
+				const trel = scene.getObjectByName(name);
+
+				if (trel.userData.requests.some((request) => request.type === 'extraction')) return;
+
+				const groups = trel.userData.groups;
+				const groupsNames = groups.filter((group) => scene.getObjectByName(group).userData.tablesOccupied > 0)
+			
+				if (!groupsNames.length) return;
+		
+				const randomGroup = groupsNames[Math.floor(Math.random() * groupsNames.length)];
+				const cells = scene.getObjectByName(randomGroup).children.filter((table) => !table.userData.empty);
+
+				if (!cells.length) return;
+
+				const randomCell = cells[Math.floor(Math.random() * cells.length)];
+		
+				console.log(`EXTRACTION REQUEST: point: ${name} group: ${randomGroup} cell: ${randomCell}`)
+
+				sequence++;
+
+				scene.userData.sequences = [
+					...(scene.userData.sequences || []),
+					{ 
+						carId: randomCell.children[0].name, 
+						sequence: sequence
+					},
+				] 
+
+				trel.userData.requests = [ 
+					...trel.userData.requests, { 
+						type: "extraction", 
+						group: randomGroup, 
+						cell: randomCell.name, 
+						point: `MS_0${trel.userData.id}`,
+						started: false 
+					} 
+				];
+			}
+		}, 30000)
+*/
 	}, undefined, function(error) {
 		console.log(error)
 	});
