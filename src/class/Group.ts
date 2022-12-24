@@ -7,6 +7,8 @@ export class Group {
     #empty: boolean;
     #point: string;
     #job: any = {};
+    #exitTables: string[] = [];
+    #nextHall: string;
 
     constructor(
         THREE: any,
@@ -15,7 +17,9 @@ export class Group {
         capacity: number,
         tablesOccupied: number,
         empty: boolean,
-        point: string
+        point: string,
+        nextHall: string,
+        exitTables: string[] = []
     ) {
         this.THREE = THREE;
         this.#scene = scene;
@@ -24,6 +28,8 @@ export class Group {
         this.#capacity = capacity;
         this.#empty = empty;
         this.#point = point;
+        this.#exitTables = exitTables;
+        this.#nextHall = nextHall;
     }
 
     get scene() {
@@ -48,6 +54,14 @@ export class Group {
 
     get point() {
         return this.#point;
+    }
+
+    get exitTables() {
+        return this.#exitTables;
+    }
+
+    get nextHall() {
+        return this.#nextHall;
     }
 
     set empty(empty: boolean) {
@@ -103,9 +117,7 @@ export class Group {
         
         point.userData.empty = false;
 
-        setTimeout(() => {
-            point.userData.startJob('checkForFreeTable');
-        }, 2000);  
+        setTimeout(() => point.userData.startJob('checkForFreeTable'), 2000);  
     }
 
     public moveBetweenTables() {
@@ -122,12 +134,18 @@ export class Group {
                 const carBody = currentTable.children[0].clone();
                 const nextTable = tables[i + 1];
 
+
                 if (!nextTable) {
 
                     if (this.point) {
                         this.startJob("checkForFreePoint", { jobId: carBody.name, carBody: carBody }, 1000);
+                    } else if (this.nextHall) {
+                        currentTable.userData.startJob("checkForFreeTable");
+                    } else if (this.exitTables.includes(currentTable.name)) {
+                        this.scene.getObjectByName(this.name).getObjectByName(currentTable.name).userData.startJob('checkForFreePoint');
                     } else {
                         currentTable.clear();
+
                         currentTable.userData.empty = true;
                     }
 
@@ -135,10 +153,30 @@ export class Group {
                 } else {
                     if (!nextTable.userData.empty) continue;
 
+                    const exitTableIndex = this.exitTables.indexOf(currentTable.name);
+
+                    if (exitTableIndex !== -1) {
+                        const exitTable = this.exitTables[exitTableIndex];
+                        const nextExitTable = this.exitTables[exitTableIndex + 1];
+                        const startJob = (
+                            nextExitTable && tables
+                                .slice(+exitTable.replace(/\D/g, "") + 1, +nextExitTable.replace(/\D/g, "") + 1)
+                                .every((table: any) => table.userData.empty)
+                        );
+
+                        if (!startJob) {
+                            this.scene.getObjectByName(this.name).getObjectByName(exitTable).userData.startJob('checkForFreePoint');
+
+                            continue;
+                        }
+                    }
+
                     currentTable.clear();
+
                     currentTable.userData.empty = true;
 
                     nextTable.add(carBody);
+
                     nextTable.userData.empty = false;
                     nextTable.userData.carBody = carBody.name;
         

@@ -262,6 +262,7 @@ export class Trel {
         dest.material.color.setHex(0xB3AFAF);
         
         if (type === 'extraction') {
+            this.scene.userData.document.getElementById(this.name.replace(/\D/g,'')).querySelector("p").innerHTML = '';
             target.userData.startJob('checkForFreeTable');
         } 
     }

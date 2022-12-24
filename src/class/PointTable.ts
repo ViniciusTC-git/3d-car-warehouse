@@ -16,6 +16,7 @@ export class PointTable {
     #ms: any;
     #job: any = {};
     #car: any;
+    #sequenced: boolean;
 
     constructor(
         THREE: any,
@@ -23,7 +24,8 @@ export class PointTable {
         name: string,
         hall: string[],
         ms: any = {},
-        car: any
+        car: any,
+        sequenced: boolean
     ) {
         this.THREE = THREE;
         this.#scene = scene;
@@ -31,6 +33,7 @@ export class PointTable {
         this.#hall = hall;
         this.#ms = ms;
         this.#car = car;
+        this.#sequenced = sequenced;
     }
 
     get scene() {
@@ -51,6 +54,10 @@ export class PointTable {
 
     get empty() {
         return this.#empty;
+    }
+
+    get sequenced() {
+        return this.#sequenced;
     }
 
     set empty(empty: boolean) {
@@ -91,7 +98,7 @@ export class PointTable {
         const cells = this.scene.getObjectByName(randomGroup).children.filter((table: any) => table.userData.empty);
         const randomCell = cells[Math.floor(Math.random() * cells.length)].name;
 
-        console.log(`INTRODUCTION REQUEST: point ${this.name} group: ${randomGroup} cell: ${randomCell}`)
+        console.log(`INTRODUCTION REQUEST: point: ${this.name} group: ${randomGroup} cell: ${randomCell}`)
 
         trel.userData.requests = [ 
             ...trel.userData.requests, { 
@@ -104,26 +111,42 @@ export class PointTable {
         ];
     }
 
-    private checkForFreeTable(jobId: number) {
-        const hall = this.scene.getObjectByName(this.hall[0]);
+    private checkForFreeHall(jobId: number) {
+        if (this.hasJobPending(jobId)) return [];
 
-        const { range, startAt } = this.ms;
+        if (
+            this.sequenced && 
+            this.scene.userData.sequences[0]?.carId !== this.scene.getObjectByName(this.name).children[0].name
+        ) return null;
 
-        const tablesToCheck = hall.children.slice(0, range);
+        const { range } = this.ms;
 
-        const occupied = tablesToCheck.some((table: any) => !table.userData.empty);
-       
-        if (this.name.includes("MS")) {
-            const isSequence = this.scene.userData.sequences[0]?.carId === this.scene.getObjectByName(this.name).children[0].name;
+        const groups = this.hall
+            .filter((group: string) => {
+                const tablesToCheck = this.scene.getObjectByName(group).children.slice(0, range);
+                const waiting = tablesToCheck.some((table: any) => !table.userData.empty);
+                
+                return !waiting;
+            }).map((group: any) => this.scene.getObjectByName(group));
+        
+        if (!groups.length) return null;
 
-            if (!isSequence) return;
+        const randomGroup = groups[Math.floor(Math.random() * groups.length)];
+        
+        if (this.sequenced) {
+            this.scene.userData.sequences.shift();
         }
 
-        if (!occupied && !this.hasJobPending(jobId)) {
+        return randomGroup;
+    }
+
+    private checkForFreeTable(jobId: number) {
+        const group = this.checkForFreeHall(jobId);
+
+        if (group) {
+            const tablesToCheck = group.children;
             
-            if (this.name.includes("MS")) {
-                this.scene.userData.sequences.shift();
-            }
+            const { startAt } = this.ms;
 
             const point = this.scene.getObjectByName(this.name);
             const carBody = point.children[0].clone();
@@ -140,7 +163,9 @@ export class PointTable {
 
             this.empty = true;
 
-            if (!hall.userData.job['moveBetweenTables']) hall.userData.startJob('moveBetweenTables');
+            if (!tablesToCheck[0].parent.userData.job['moveBetweenTables']) {
+                tablesToCheck[0].parent.userData.startJob('moveBetweenTables');
+            }
         }
     }
 
@@ -174,6 +199,6 @@ export class PointTable {
             point.add(model);
     
             this.startJob('checkForFreeTable');
-        }, 35000)
+        }, 25000)
     }
 }
