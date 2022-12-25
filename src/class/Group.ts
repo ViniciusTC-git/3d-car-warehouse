@@ -111,7 +111,12 @@ export class Group {
             lastTable.userData.empty = true;
         }
 
-        point.add(carBody);
+        if (point.name.includes("TREL")) {
+            point.children[0].add(carBody);
+        } else {
+            point.add(carBody);
+        }
+    
 
         carBody.userData.status = "idle";
         

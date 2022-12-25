@@ -105,9 +105,9 @@ export class PointITrell {
 
         point.userData.empty = false;
 
-        const carBody = trel.children[0].clone();
+        const carBody = trel.children[0].children[0].clone();
 
-        trel.clear();
+        trel.children[0].clear();
 
         point.add(carBody);
 

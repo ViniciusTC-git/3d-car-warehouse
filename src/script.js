@@ -14,13 +14,23 @@ const COLORS = [
 	'0x878786',
 	'0x2B2B29',
 	'0x71A2DE',
-	'0x993741'
+	'0x993741',
+    '0xF2D583',
+    '0x092F7D',
+    '0x009E2F',
+    '0xED8311',
+	'0xA4D4F5',
+	'0x0F2E19',
+	'0xFFFFFF'
 ]
 const carUrl = new URL("../static/SUV.glb", import.meta.url);
+const trelUrl = new URL("../static/trel.json", import.meta.url);
 const scene = new THREE.Scene();
 const stats = Stats();
 
 scene.userData.document = document;
+scene.background = new THREE.Color(0xA0A0A0);
+scene.fog = new THREE.Fog(0xA0A0A0, 10, 1000);
 
 function createExtractionGUI() {
 	const container = document.createElement("div");
@@ -79,30 +89,15 @@ function randomSequences(lastSequence) {
 function createGround() {
 	const ground = new THREE.Mesh(
 		new THREE.PlaneGeometry( 1000, 1000 ), 
-		new THREE.MeshPhongMaterial( { color: 0xD6D6D6, depthWrite: false } ) 
+		new THREE.MeshPhongMaterial( { 
+			color: 0xD6D6D6, 
+			depthWrite: false 
+		} ) 
 	);
 
 	ground.rotation.x = - Math.PI / 2;
 
 	scene.add(ground)
-	/*const planeGeometry = new THREE.PlaneGeometry(200, 200);
-	const planeMaterial =  new THREE.MeshBasicMaterial({ 
-		color: 0xB3AFAF,
-		side: THREE.DoubleSide 
-	});
-	const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-
-	plane.rotation.x = -0.5 * Math.PI;
-
-	scene.add(plane);*/
-
-	//const axesHelper = new THREE.AxesHelper(6);
-
-	//scene.add(axesHelper);
-
-	//const grid = new THREE.GridHelper(200, 60);
-
-	//scene.add(grid);
 }
 
 
@@ -116,9 +111,15 @@ function createPointTable({
 	car = null,
 	sequenced = false
 }) {
-	const geometry = new THREE.CylinderGeometry( 2.5, 2.5, 0.5, 32);
-	const material = new THREE.MeshStandardMaterial( { color: 0xB3AFAF, side: THREE.DoubleSide } );
-	const pointTable = new THREE.Mesh( geometry, material );
+	const pointTable = new THREE.Mesh( 
+		new THREE.CylinderGeometry(2.5, 2.5, 0.5, 32), 
+		new THREE.MeshToonMaterial({ 
+			color: 0xB3AFAF,
+			side: THREE.DoubleSide,
+			transparent: true,
+			opacity: 0.8 
+		})
+	);
 
 	pointTable.name = id;
 	pointTable.position.set(x, 0, z);
@@ -130,16 +131,12 @@ function createPointTable({
 }
 function createPointITrel({ 
 	id, 
+	trel,
 	name, 
 	x, 
 	z, 
 	points 
 }) {
-	const trel = new THREE.Mesh( 
-		new THREE.BoxGeometry( 3.0, 0.5, 4 ), 
-		new THREE.MeshLambertMaterial({ color: 0xFCBA03 }) 
-	);
-
 	trel.name = name;
 	trel.position.set(x, 0, z);
 
@@ -149,12 +146,14 @@ function createPointITrel({
 	
 	scene.add(trel);
 }
-function createTrel({ id, name, x, z, groups }) {
-	const trel = new THREE.Mesh( 
-		new THREE.BoxGeometry( 3.0, 0.5, 4 ), 
-		new THREE.MeshLambertMaterial({ color: 0xFCBA03 }) 
-	);
-
+function createTrel({ 
+	id, 
+	trel, 
+	name, 
+	x, 
+	z, 
+	groups 
+}) {
 	trel.name = name;
 	trel.position.set(x, 0, z);
 
@@ -217,10 +216,11 @@ function createLine({
 	for (let i = 0; i < capacity; i++) {
 		const table = new THREE.Mesh( 
 			new THREE.BoxGeometry( 3.0, 0.5, 4 ), 
-			new THREE.MeshPhongMaterial({ 
-				color: 0xB3AFAF, 
-				depthWrite: false 
-			}) 
+			new THREE.MeshToonMaterial( { 
+				color: tableStyle[i].color || 0xB3AFAF,
+				opacity: tableStyle[i].opacity || 0.8,
+				transparent: true 
+			} )
 		);
 		
 		const tableName = `TABLE_${i < 10 ? '0' : ''}${i}`;
@@ -241,7 +241,7 @@ function createLine({
 		);
 			
 		if ([true, false][Math.floor(Math.random() * 2)] && !tableStyle[i].empty) {
-			carName = `CAR_${i < 10 ? '0' : ''}${i}`;
+			carName = `CAR_${new Date().getTime()}`;
 
 			table.add(createRandomCar({
 				model: car.scene.clone(),
@@ -311,10 +311,7 @@ function init() {
 
 	orbit.update();
 
-	scene.background = new THREE.Color(0xa0a0a0);
-	scene.fog = new THREE.Fog(0xa0a0a0, 10, 1000);
-
-	const hemiLight = new THREE.HemisphereLight( 0xffffff, 0x444444 );
+	const hemiLight = new THREE.HemisphereLight( 0xFFFFFF, 0x444444 );
 
 	hemiLight.position.set(0, 20, 0);
 
@@ -325,6 +322,24 @@ function init() {
 	const loader = new GLTFLoader();
 
 	loader.load(carUrl.href, (car) => {
+		const objLoader = new THREE.ObjectLoader();
+
+		objLoader.load(trelUrl.href, (trel) => {
+			createPointITrel({ id: 1, trel: trel.clone(), name: "TREL_POINT_I", x: 8, z: -56, points: ["ME_03", "ME_04"] });
+			createTrel({ id: 1,  trel: trel.clone(), name: "TREL_01", x: -48, z: -4, groups: ["GROUP_01", "GROUP_02"] });
+			createTrel({ id: 2, trel: trel.clone(), name: "TREL_02", x: -48, z: -20, groups: ["GROUP_03", "GROUP_04"] });
+			createTrel({ id: 3, trel: trel.clone(), name: "TREL_03", x: 27, z: -36, groups: ["GROUP_05", "GROUP_06"] });
+			createTrel({ id: 4, trel: trel.clone(), name: "TREL_04", x: 27, z: -52, groups: ["GROUP_07", "GROUP_08"] });
+			setTimeout(() => {
+				for (const name of ["TREL_01", "TREL_02", "TREL_03", "TREL_04"]) {
+					const trel = scene.getObjectByName(name);
+			
+					trel.userData.startJob('requestJob');
+				}
+			
+			}, 5000)
+		});
+
 		createLine({ 
 			id: "GROUP_01", 
 			capacity: 24, 
@@ -482,7 +497,9 @@ function init() {
 					position: { x: 0, y: 0, z: 0 }, 
 					rotation: { x: 0, y: 0, z: 0 },
 					spaceBetweenTable: 5.25,
-					empty: true
+					empty: true,
+					color: 0x479ecc,
+					opacity: 0.4
 				}
 			}), {})
 		});
@@ -498,7 +515,9 @@ function init() {
 					position: { x: 65, y: 0, z: 0 }, 
 					rotation: { x: 0, y: 3.15, z: 0 },
 					spaceBetweenTable: 5,
-					empty: true
+					empty: true,
+					color: 0x479ecc,
+					opacity: 0.4
 				}
 			}), {})
 		});
@@ -515,7 +534,9 @@ function init() {
 					position: { x: 56, y: 0, z: 0 }, 
 					rotation: { x: 0, y: 0, z: 0 },
 					spaceBetweenTable: 5,
-					empty: true
+					empty: true,
+					color: 0xd98704,
+					opacity: 0.4
 				}
 			}), {})
 		});
@@ -533,6 +554,8 @@ function init() {
 					rotation: { x: 0, y: 3.15, z: 0 },
 					spaceBetweenTable: 5,
 					empty: true,
+					color: 0xd98704,
+					opacity: 0.4,
 					...(
 						tableIndex === 0 ? {
 							ms: { range: 3, startAt: 0 },
@@ -554,6 +577,8 @@ function init() {
 					position: { x: 40, y: 0, z: 0 }, 
 					rotation: { x: 0, y: ([5, 8].includes(tableIndex) ? Math.PI / 2 : 0), z: 0 },
 					spaceBetweenTable: 5,
+					color: 0xd98704,
+					opacity: 0.4,
 					empty: true,
 					point: tableIndex === 5 ? "ME_02" : tableIndex === 8 ? "ME_01" : null
 				}
@@ -570,20 +595,6 @@ function init() {
 		createPointTable({ id: "MS_03", x: 72, z: -40, hall: ["MS_HALL"], ms: { range: 7, startAt: 6 }, sequenced: true });
 		createPointTable({ id: "MS_04", x: 72, z: -56, hall: ["MS_HALL"], ms: { range: 10, startAt: 9 }, sequenced: true });		
 		createPointTable({ id: "PK", x: 78.4, z: -65, rotation: Math.PI / -2, hall: ["PK_HALL"], ms: { range: 1, startAt: 0 } });
-		createPointITrel({ id: 1, name: "TREL_POINT_I", x: 5, z: -56, points: ["ME_03", "ME_04"] });
-
-		createTrel({ id: 1, name: "TREL_01", x: -50, z: -4, groups: ["GROUP_01", "GROUP_02"] });
-		createTrel({ id: 2, name: "TREL_02", x: -50, z: -20, groups: ["GROUP_03", "GROUP_04"] });
-		createTrel({ id: 3, name: "TREL_03", x: 25, z: -36, groups: ["GROUP_05", "GROUP_06"] });
-		createTrel({ id: 4, name: "TREL_04", x: 25, z: -52, groups: ["GROUP_07", "GROUP_08"] });
-		
-		
-		for (const name of ["TREL_01", "TREL_02", "TREL_03", "TREL_04"]) {
-			const trel = scene.getObjectByName(name);
-	
-			trel.userData.startJob('requestJob');
-		}
-
 		
 		const point = scene.getObjectByName("POINT_I");
 
@@ -615,8 +626,6 @@ function init() {
 					lastSequence = Math.max(...shuffledArray);
 				}
 
-				console.log(lastSequence, shuffledArray);
-
 				const sequence = shuffledArray.shift();
 
 				document
@@ -644,7 +653,7 @@ function init() {
 					} 
 				];
 			}
-		}, 5000)
+		}, 25000)
 
 	}, undefined, function(error) {
 		console.log(error)

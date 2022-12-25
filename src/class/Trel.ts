@@ -148,13 +148,11 @@ export class Trel {
 
         const me = this.scene.getObjectByName(this.lastGroup).getObjectByName(this.lastTable);
         const trel = this.scene.getObjectByName(this.name);
-        const trelX = Math.round(trel.getWorldPosition(new this.THREE.Vector3()).x);
+        const trelX = Math.round(trel.getWorldPosition(new this.THREE.Vector3()).x) - 2;
         const meX = Math.round(me.getWorldPosition(new this.THREE.Vector3()).x);
 
-        //console.log(`${this.name}: ${trelX}`, `[${me.name}]: ${meX}`)
-
         if (meX === trelX) {
-            if (this.requests[0].type === 'introduction') {
+            if (type === 'introduction') {
                 this.onAddToTable();
             } else {
                 this.onGrabCar();
@@ -174,9 +172,9 @@ export class Trel {
         const trelX = Math.round(trel.getWorldPosition(new this.THREE.Vector3()).x);
         const pointX = Math.round(point.getWorldPosition(new this.THREE.Vector3()).x);
 
-        //console.log(`${this.name}: ${trelX}`, `[${point.name}]: ${pointX}`)
+        if (this.name === "TREL_04")console.log(`${this.name}: ${trelX}`, `[${point.name}]: ${pointX}`)
         
-        if (trelX >= (pointX - 2) && trelX <= (pointX + 3)) {
+        if (trelX >= (pointX - 2) && trelX <= (pointX + 5))  {
             if (this.requests[0].type === "introduction") {
                 this.onGrabCar();
             } else {
@@ -210,7 +208,7 @@ export class Trel {
 
         target.userData.empty = true;
 
-        trel.add(carBody);
+        trel.children[0].add(carBody);
 
         carBody.userData.status = 'moving';
 
@@ -247,9 +245,9 @@ export class Trel {
         
         target.userData.empty = false;
 
-        const carBody = trel.children[0].clone();
+        const carBody = trel.children[0].children[0].clone();
 
-        trel.clear();
+        trel.children[0].clear();
 
         this.empty = true;
 
