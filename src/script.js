@@ -38,9 +38,9 @@ function createExtractionGUI() {
 	container.style.zIndex = '2'
 	container.style.position = 'fixed';
 	container.style.top = '5px'
-	container.style.left = '600px'
+	container.style.marginRight = 'auto'
+	container.style.marginLeft = '30vw';
 	container.style.display = 'flex';
-	container.style.flexWrap = 'nowrap';
 	container.style.fontFamily = 'Verdana, sans-serif';
 
 	for (let i = 0; i < 4; i++) {
@@ -52,19 +52,20 @@ function createExtractionGUI() {
 
 		item.style.cursor = 'pointer';
 		item.style.flexDirection = 'column';
-		item.style.width = '150px';
-		item.style.height = '60px'
+		item.style.width = '10vw';
+		item.style.height = '8vh'
 		item.style.margin = '5px';
 		item.style.textAlign = 'center';
-		item.style.lineHeight = '0px';
-		item.style.fontSize = '12px';
 		item.style.border = '2px solid #2d2e30';
 		item.style.borderRadius = '12px';
 		item.style.padding = '5px';
 		item.style.color = 'white';
 		item.style.backgroundColor = 'rgba( 0, 0, 0, 0.75 )';
 
+		header.style.fontSize = '0.6vw';
 		header.innerText = `Extraction Hall 0${i + 1}`;
+
+		body.style.fontSize = '0.6vw';
 		
 		item.appendChild(header);
 
@@ -631,8 +632,8 @@ function init() {
 				document
 					.getElementById(name.replace(/\D/g,''))
 					.querySelector("p").innerHTML = `
-						<p>${randomCell.children[0].name}</p>
-						<p>SEQ: 0${sequence}</p>
+						${randomCell.children[0].name}<br/>
+						SEQ: 0${sequence}
 					`;
 
 				scene.userData.sequences = [

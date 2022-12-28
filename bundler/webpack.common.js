@@ -1,6 +1,5 @@
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const MiniCSSExtractPlugin = require('mini-css-extract-plugin')
 const path = require('path')
 
 module.exports = {
@@ -15,19 +14,14 @@ module.exports = {
     [
         new CopyWebpackPlugin({
             patterns: [
-                { from: path.resolve(__dirname, '../static') }
-            ]
-        }),
-        new CopyWebpackPlugin({
-            patterns: [
+                { from: path.resolve(__dirname, '../static') },
                 { from: path.resolve(__dirname, '../src/class') }
             ]
         }),
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, '../src/index.html'),
             minify: true
-        }),
-        new MiniCSSExtractPlugin()
+        })
     ],
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx'],
@@ -36,39 +30,20 @@ module.exports = {
     {
         rules:
         [
-            // HTML
             {
                 test: /\.(html)$/,
                 use: ['html-loader']
             },
-
-            // JS
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                use:
-                [
-                    'babel-loader'
-                ]
+                use: ['babel-loader']
             },
-            // TS
             {
                 test: /\.tsx?$/,
                 exclude: /node_modules/,
                 use: ['ts-loader'],
             },
-
-            // CSS
-            {
-                test: /\.css$/,
-                use:
-                [
-                    MiniCSSExtractPlugin.loader,
-                    'css-loader'
-                ]
-            },
-
-            // Images
             {
                 test: /\.(jpg|png|gif|svg)$/,
                 use:
@@ -82,8 +57,6 @@ module.exports = {
                     }
                 ]
             },
-
-            // Fonts
             {
                 test: /\.(ttf|eot|woff|woff2)$/,
                 use:
