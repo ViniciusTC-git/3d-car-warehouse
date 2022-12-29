@@ -10,6 +10,8 @@ export class Table {
     #job: any;
     #hall: string[];
     #ms: any;
+    onAddCar: any;
+    onRemoveCar: any;
 
     constructor(
         THREE: any,
@@ -21,7 +23,9 @@ export class Table {
         empty: boolean,
         point: string,
         hall: string[],
-        ms: any
+        ms: any,
+        onAddCar: any,
+        onRemoveCar: any
     ) {
         this.THREE = THREE;
         this.#scene = scene;
@@ -33,6 +37,8 @@ export class Table {
         this.#point = point;
         this.#hall = hall;
         this.#ms = ms;
+        this.onAddCar = onAddCar;
+        this.onRemoveCar = onRemoveCar;
     }
 
     get scene() {
@@ -120,6 +126,10 @@ export class Table {
             tablesToCheck[startAt].userData.carBody = carBody.name;
             tablesToCheck[startAt].userData.empty = false;
 
+            if (tablesToCheck[startAt].userData.onAddCar) tablesToCheck[startAt].userData.onAddCar(this.scene);
+          
+            if (point.userData.onRemoveCar) point.userData.onRemoveCar(this.scene);
+
             point.clear();
 
             carBody.userData.status = "moving";
@@ -145,11 +155,15 @@ export class Table {
 
         const carBody = table.children[0].clone();
 
+        if (table.userData.onRemoveCar) table.userData.onRemoveCar(this.scene);
+  
         table.clear();
 
         table.userData.empty = true;
 
         point.add(carBody);
+
+        if (point.userData.onAddCar) point.userData.onAddCar(this.scene);
 
         carBody.userData.status = "idle";
         

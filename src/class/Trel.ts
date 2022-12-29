@@ -121,28 +121,6 @@ export class Trel {
         this.#job = null;
     }
 
-    private requestJob() {
-        if(
-            this.requests.length && 
-            !this.requests[0].started
-        ) {
-            this.requests[0].started = true;
-            this.lastPoint = this.requests[0].point;
-            this.lastGroup = this.requests[0].group;
-            this.lastTable = this.requests[0].cell;
-
-            const dest = this.scene.getObjectByName(this.lastGroup).getObjectByName(this.lastTable);
-
-            if (this.requests[0].type === 'introduction') {
-                dest.material.color.setHex(0x76E072);
-                this.startJob('moveToTable');
-            } else {
-                dest.material.color.setHex(0x68D7F2);
-                this.startJob('moveToCell');
-            }
-        }   
-    }
-
     private moveToCell() {
         const { type } = this.requests[0];
 
@@ -172,7 +150,7 @@ export class Trel {
         const trelX = Math.round(trel.getWorldPosition(new this.THREE.Vector3()).x);
         const pointX = Math.round(point.getWorldPosition(new this.THREE.Vector3()).x);
 
-        if (this.name === "TREL_04")console.log(`${this.name}: ${trelX}`, `[${point.name}]: ${pointX}`)
+        //if (this.name === "TREL_04")console.log(`${this.name}: ${trelX}`, `[${point.name}]: ${pointX}`)
         
         if (trelX >= (pointX - 2) && trelX <= (pointX + 5))  {
             if (this.requests[0].type === "introduction") {
@@ -260,9 +238,39 @@ export class Trel {
         dest.material.color.setHex(0xB3AFAF);
         
         if (type === 'extraction') {
-            this.scene.userData.document.getElementById(this.name.replace(/\D/g,'')).querySelector("p").innerHTML = '';
+            this.scene.userData.clearSequenceGUI(this.name);
+
             target.userData.startJob('checkForFreeTable');
-        } 
+
+            this.scene.userData.updateProgressGUI('Optimo', 'remove');
+        } else {
+            this.scene.userData.updateProgressGUI('Optimo', 'add');
+        }
+    }
+
+    public requestJob() {
+        this.requests[0].started = true;
+        this.lastPoint = this.requests[0].point;
+        this.lastGroup = this.requests[0].group;
+        this.lastTable = this.requests[0].cell;
+
+        const dest = this.scene.getObjectByName(this.lastGroup).getObjectByName(this.lastTable);
+
+        if (this.requests[0].type === 'introduction') {
+            dest.material.color.setHex(0x76E072);
+            this.startJob('moveToTable');
+        } else {
+            dest.material.color.setHex(0x68D7F2);
+            this.startJob('moveToCell');
+        }
+    }
+
+    public hasRequest() {
+        return !!this.requests.length && !this.requests[0].started;
+    }
+
+    public hasExtractionRequest() {
+        return this.requests.some((request: any) => request.type === 'extraction')
     }
 
 

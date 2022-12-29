@@ -111,12 +111,13 @@ export class Group {
             lastTable.userData.empty = true;
         }
 
+        if (lastTable.userData.onRemoveCar) lastTable.userData.onRemoveCar(this.scene);
+        
         if (point.name.includes("TREL")) {
             point.children[0].add(carBody);
         } else {
             point.add(carBody);
         }
-    
 
         carBody.userData.status = "idle";
         
@@ -139,19 +140,23 @@ export class Group {
                 const carBody = currentTable.children[0].clone();
                 const nextTable = tables[i + 1];
 
-
                 if (!nextTable) {
-
                     if (this.point) {
                         this.startJob("checkForFreePoint", { jobId: carBody.name, carBody: carBody }, 1000);
                     } else if (this.nextHall) {
                         currentTable.userData.startJob("checkForFreeTable");
                     } else if (this.exitTables.includes(currentTable.name)) {
-                        this.scene.getObjectByName(this.name).getObjectByName(currentTable.name).userData.startJob('checkForFreePoint');
+                        this.scene
+                            .getObjectByName(this.name)
+                            .getObjectByName(currentTable.name)
+                            .userData
+                            .startJob('checkForFreePoint');
                     } else {
                         currentTable.clear();
 
                         currentTable.userData.empty = true;
+
+                        if (currentTable.userData.onRemoveCar) currentTable.userData.onRemoveCar(this.scene);
                     }
 
                     break;
@@ -164,7 +169,8 @@ export class Group {
                         const exitTable = this.exitTables[exitTableIndex];
                         const nextExitTable = this.exitTables[exitTableIndex + 1];
                         const startJob = (
-                            nextExitTable && tables
+                            nextExitTable && 
+                            tables
                                 .slice(+exitTable.replace(/\D/g, "") + 1, +nextExitTable.replace(/\D/g, "") + 1)
                                 .every((table: any) => table.userData.empty)
                         );

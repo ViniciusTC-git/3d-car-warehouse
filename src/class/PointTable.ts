@@ -1,16 +1,6 @@
 import { Car } from "./Car";
+import { COLORS } from "./COLORS";
 
-const COLORS = [
-	'0xC7F595',
-	'0x878786',
-	'0x2B2B29',
-	'0x71A2DE',
-	'0x993741',
-    '0xF2D583',
-    '0x092F7D',
-    '0x009E2F',
-    '0xED8311'
-]
 export class PointTable {
     THREE: any;
     #scene: any;
@@ -116,7 +106,7 @@ export class PointTable {
     }
 
     private checkForFreeHall(jobId: number) {
-        if (this.hasJobPending(jobId)) return [];
+        if (this.hasJobPending(jobId)) return null;
 
         if (
             this.sequenced && 
@@ -136,7 +126,7 @@ export class PointTable {
         if (!groups.length) return null;
 
         const randomGroup = groups[Math.floor(Math.random() * groups.length)];
-        
+
         if (this.sequenced) {
             this.scene.userData.sequences.shift();
         }
@@ -158,6 +148,14 @@ export class PointTable {
             tablesToCheck[startAt].add(carBody);
             tablesToCheck[startAt].userData.carBody = carBody.name;
             tablesToCheck[startAt].userData.empty = false;
+
+            if (tablesToCheck[startAt].userData.onAddCar) {
+                tablesToCheck[startAt].userData.onAddCar(this.scene);
+            }
+
+            if (point.userData.onRemoveCar) {
+                point.userData.onRemoveCar(this.scene);
+            }
 
             point.clear();
 
@@ -182,7 +180,7 @@ export class PointTable {
             const model = this.#car.clone();
             const carId = new Date().getTime()
             const carName = `CAR_${carId}`;
-    
+
             model.userData = new Car(carId, carName, "idle", null, null, this.name);
             model.name = carName;
             model.children[1].visible = false;
@@ -199,10 +197,10 @@ export class PointTable {
             material.color.setHex(COLORS[Math.floor(Math.random() * COLORS.length)]);
         
             model.getObjectByName('Cube').material = material;
-    
+
             point.add(model);
-    
+
             this.startJob('checkForFreeTable');
-        }, 25000)
+        }, 10000);
     }
 }
