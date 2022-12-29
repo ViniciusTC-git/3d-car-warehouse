@@ -203,11 +203,7 @@ function createLine({
 
 		group.add(table);
 	}
-
-	if (id === "PK_HALL") {
-		console.log(group);
-	}
-
+	
 	group.userData = new Group(
 		THREE, 
 		scene, 
