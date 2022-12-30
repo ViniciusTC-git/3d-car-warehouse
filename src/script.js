@@ -536,7 +536,8 @@ function init() {
 			scene, 
 			document, 
 			["TREL_01","TREL_02","TREL_03","TREL_04"], 
-			["GROUP_01","GROUP_02","GROUP_03","GROUP_05","GROUP_06","GROUP_07", "GROUP_08"]
+			["GROUP_01","GROUP_02","GROUP_03","GROUP_04","GROUP_05","GROUP_06","GROUP_07","GROUP_08"],
+			128
 		);
 
 		scene.getObjectByName("POINT_I").userData.randomCar();

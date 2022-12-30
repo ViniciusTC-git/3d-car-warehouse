@@ -169,7 +169,7 @@ export class Table {
         
         point.userData.empty = false;
 
-        point.userData.introductionRequest();
+        point.userData.startJob('introductionRequest', 3000);
     }
 
 }

@@ -111,7 +111,7 @@ export class PointITrell {
 
         point.add(carBody);
 
-        point.userData.introductionRequest();
+        point.userData.startJob('introductionRequest', 3000);
 
         carBody.userData.status = "idle";
 

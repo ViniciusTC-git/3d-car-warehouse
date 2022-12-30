@@ -78,31 +78,51 @@ export class PointTable {
         this.#job[index] = setInterval(() => this[name](index), time);
     }
 
-    public introductionRequest() {
+    public introductionRequest(jobId: number) {
+        const trel = this.scene.getObjectByName(`TREL_${this.name.replace(/\D/g, "")}`);
+        const introduction = trel.userData.requests.find((request: any) => request.type === 'introduction' && request.started);
+        
+        if (introduction) {
+            console.log(`[WAITING INTRODUCTION][INTRODUCTION REQUEST][point: ${this.name}][group: ${introduction.group}][cell: ${introduction.cell}]`);
+            return;
+        }
+
+        const { occupied, capacity } = this.hall.reduce((acc: any, group: any) => ({
+            ...acc,
+            occupied: acc['occupied'] + this.scene.getObjectByName(group).userData.tablesOccupied,
+            capacity: acc['capacity'] + this.scene.getObjectByName(group).userData.capacity 
+        }), { occupied: 0, capacity: 0 });
+
+        if (occupied >= capacity - 1) {
+            console.log(`[WAITING CAPACITY EXTEND][INTRODUCTION REQUEST][point: ${this.name}]`);
+            return;
+        };
+
         const groupsNames = this.hall.filter((group: string) => {
             const groupData = this.scene.getObjectByName(group).userData;
 
-            return groupData.tablesOccupied < (groupData.capacity - 1);
-        })
+            return groupData.tablesOccupied < groupData.capacity;
+        });
     
         if (!groupsNames.length) return;
 
-        const trel = this.scene.getObjectByName(`TREL_${this.name.replace(/\D/g, "")}`);
         const randomGroup = groupsNames[Math.floor(Math.random() * groupsNames.length)];
         const cells = this.scene.getObjectByName(randomGroup).children.filter((table: any) => table.userData.empty);
-        const randomCell = cells[Math.floor(Math.random() * cells.length)].name;
+        const randomCell = cells[Math.floor(Math.random() * cells.length)];
 
-        console.log(`INTRODUCTION REQUEST: point: ${this.name} group: ${randomGroup} cell: ${randomCell}`)
+        console.log(`[REQUESTED][INTRODUCTION REQUEST][point: ${this.name}][group: ${randomGroup}][cell: ${randomCell.name}][empty:${randomCell.userData.empty} children: ${randomCell.children.length}]`);
 
         trel.userData.requests = [ 
             ...trel.userData.requests, { 
                 type: "introduction", 
                 group: randomGroup, 
-                cell: randomCell, 
+                cell: randomCell.name, 
                 point: this.name,
                 started: false 
             } 
         ];
+
+        this.clearJob(jobId);
     }
 
     private checkForFreeHall(jobId: number) {
@@ -201,6 +221,6 @@ export class PointTable {
             point.add(model);
 
             this.startJob('checkForFreeTable');
-        }, 10000);
+        }, 15000);
     }
 }

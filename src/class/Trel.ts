@@ -193,17 +193,9 @@ export class Trel {
         this.empty = false;
         this.lastCarBody = carBody.name;
 
-        const group = this.scene.getObjectByName(this.lastGroup);
-
         if (type === 'extraction') {
-            group.userData.tablesOccupied -= 1;
-            group.userData.empty = group.userData.tablesOccupied === 0;
-
             this.startJob('moveToTable');
         } else {
-            group.userData.tablesOccupied += 1;
-            group.userData.empty = group.userData.tablesOccupied === 0;
-
             this.startJob('moveToCell');
         }
     }
@@ -220,8 +212,6 @@ export class Trel {
             this.scene.getObjectByName(this.lastPoint) 
         );
         const dest = this.scene.getObjectByName(this.lastGroup).getObjectByName(this.lastTable);
-        
-        target.userData.empty = false;
 
         const carBody = trel.children[0].children[0].clone();
 
@@ -230,21 +220,31 @@ export class Trel {
         this.empty = true;
 
         target.add(carBody);
+        
+        target.userData.empty = false;
 
         carBody.userData.status = 'idle';
 
         this.requests.shift();
 
         dest.material.color.setHex(0xB3AFAF);
-        
+
+        const group = this.scene.getObjectByName(this.lastGroup);
+
         if (type === 'extraction') {
             this.scene.userData.clearSequenceGUI(this.name);
 
             target.userData.startJob('checkForFreeTable');
 
             this.scene.userData.updateProgressGUI('Optimo', 'remove');
+
+            group.userData.tablesOccupied -= 1;
+            group.userData.empty = group.userData.tablesOccupied === 0;
         } else {
             this.scene.userData.updateProgressGUI('Optimo', 'add');
+
+            group.userData.tablesOccupied += 1;
+            group.userData.empty = group.userData.tablesOccupied === 0;
         }
     }
 
@@ -272,6 +272,5 @@ export class Trel {
     public hasExtractionRequest() {
         return this.requests.some((request: any) => request.type === 'extraction')
     }
-
 
 }
