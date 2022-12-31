@@ -9,7 +9,7 @@ import { Table } from "./class/Table"
 import { PointITrell } from "./class/Point_I_Trell";
 import { Car } from './class/Car';
 import { WarehouseController } from './class/WarehouseController';
-import { COLORS } from './utils/COLORS';
+import { COLORS } from './class/COLORS';
 import { progressCalcu } from './utils/progressCalc';
 
 const carUrl = new URL("../static/SUV.glb", import.meta.url);

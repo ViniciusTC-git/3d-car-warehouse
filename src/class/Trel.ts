@@ -233,13 +233,13 @@ export class Trel {
 
         carBody.userData.status = 'idle';
 
-        this.requests.shift();
-
         dest.material.color.setHex(0xB3AFAF);
 
         const group = this.scene.getObjectByName(this.lastGroup);
 
         if (type === 'extraction') {
+            console.log(`[TREL][COMPLETED][EXTRACTION REQUEST][${this.name}][${this.lastGroup}][${this.lastTable}][${this.requests[0].carName}]`);
+
             target.userData.startJob('checkForFreeTable');
 
             this.scene.userData.updateProgressGUI(this.buffer, 'remove', 1);
@@ -247,11 +247,15 @@ export class Trel {
             group.userData.tablesOccupied -= 1;
             group.userData.empty = group.userData.tablesOccupied === 0;
         } else {
+            console.log(`[TREL][COMPLETED][INTRODUCTION REQUEST][${this.name}][${this.lastGroup}][${this.lastTable}][${this.requests[0].carName}]`);
+
             this.scene.userData.updateProgressGUI(this.buffer, 'add', 1);
 
             group.userData.tablesOccupied += 1;
             group.userData.empty = group.userData.tablesOccupied === 0;
         }
+
+        this.requests.shift();
     }
 
     public requestJob() {
@@ -263,10 +267,14 @@ export class Trel {
         const dest = this.scene.getObjectByName(this.lastGroup).getObjectByName(this.lastTable);
 
         if (this.requests[0].type === 'introduction') {
+            console.log(`[TREL][REQUESTED][INTRODUCTION REQUEST][${this.name}][${this.lastGroup}][${this.lastTable}][${this.requests[0].carName}]`);
+
             dest.material.color.setHex(0x76E072);
             
             this.startJob('moveToTable');
         } else {
+            console.log(`[TREL][REQUESTED][EXTRACTION REQUEST][${this.name}][${this.lastGroup}][${this.lastTable}][${this.requests[0].carName}]`);
+
             this.scene.userData.updateSequenceGUI(this.name, this.requests[0].carName, this.requests[0].sequence);
 
             dest.material.color.setHex(0x68D7F2);

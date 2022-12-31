@@ -78,7 +78,7 @@ export class PointTable {
         const introduction = trel.userData.requests.find((request: any) => request.type === 'introduction' && request.started);
         
         if (introduction) {
-            console.log(`[POINT_TABLE][WAITING INTRODUCTION][INTRODUCTION REQUEST][point: ${this.name}][group: ${introduction.group}][cell: ${introduction.cell}]`);
+            console.log(`[POINT_TABLE][WAITING INTRODUCTION][INTRODUCTION REQUEST][${this.name}][${introduction.group}][${introduction.cell}]`);
             return;
         }
 
@@ -89,7 +89,7 @@ export class PointTable {
         }), { occupied: 0, capacity: 0 });
 
         if (occupied >= capacity - 1) {
-            console.log(`[POINT_TABLE][WAITING CAPACITY EXTEND][INTRODUCTION REQUEST][point: ${this.name}]`);
+            console.log(`[POINT_TABLE][WAITING CAPACITY EXTEND][INTRODUCTION REQUEST][${this.name}]`);
             return;
         };
 
@@ -104,14 +104,16 @@ export class PointTable {
         const randomGroup = groupsNames[Math.floor(Math.random() * groupsNames.length)];
         const cells = this.scene.getObjectByName(randomGroup).children.filter((table: any) => table.userData.empty);
         const randomCell = cells[Math.floor(Math.random() * cells.length)];
+        const carName = this.scene.getObjectByName(this.name).children[0].name;
 
-        console.log(`[POINT_TABLE][REQUESTED][INTRODUCTION REQUEST][point: ${this.name}][group: ${randomGroup}][cell: ${randomCell.name}]`);
+        console.log(`[POINT_TABLE][REQUESTED][INTRODUCTION REQUEST][${this.name}][${randomGroup}][${randomCell.name}][${carName}]`);
 
         trel.userData.requests = [ 
             ...trel.userData.requests, { 
                 type: "introduction", 
                 group: randomGroup, 
                 cell: randomCell.name, 
+                carName: carName,
                 point: this.name,
                 started: false 
             } 

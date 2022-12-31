@@ -1,5 +1,5 @@
 import { Car } from "./Car";
-import { COLORS } from "../utils/COLORS";
+import { COLORS } from "./COLORS";
 
 export interface Buffer {
     [key: string]: {
