@@ -15,7 +15,8 @@ module.exports = {
         new CopyWebpackPlugin({
             patterns: [
                 { from: path.resolve(__dirname, '../static') },
-                { from: path.resolve(__dirname, '../src/class') }
+                { from: path.resolve(__dirname, '../src/class') },
+                { from: path.resolve(__dirname, '../src/utils') }
             ]
         }),
         new HtmlWebpackPlugin({

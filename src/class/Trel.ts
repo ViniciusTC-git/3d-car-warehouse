@@ -1,3 +1,10 @@
+export interface Request {
+    type: "introduction" | "extraction", 
+    group: string, 
+    cell: string, 
+    point: string,
+    started: boolean
+};
 export class Trel {
     THREE: any;
     #scene: any;
@@ -12,13 +19,8 @@ export class Trel {
     #lastPoint: string;
     #lastCarBody: string;
     #job: any;
-    #requests: { 
-        type: "introduction" | "extraction", 
-        group: string, 
-        cell: string, 
-        point: string,
-        started: boolean
-    }[] = [];
+    #requests: Request[] = [];
+    #buffer: string;
 
     constructor(
         THREE: any,
@@ -27,7 +29,8 @@ export class Trel {
         name: string, 
         x: number, 
         z: number, 
-        groups: string[]
+        groups: string[],
+        buffer: string
     ) {
         this.THREE = THREE;
         this.#scene = scene;
@@ -37,6 +40,7 @@ export class Trel {
         this.#z = z;
         this.#groups = groups;
         this.#job = null;
+        this.#buffer = buffer;
     }
 
     get scene() {
@@ -61,6 +65,10 @@ export class Trel {
 
     get groups() {
         return this.#groups;
+    }
+
+    get buffer() {
+        return this.#buffer;
     }
 
     get lastGroup() {
@@ -232,16 +240,14 @@ export class Trel {
         const group = this.scene.getObjectByName(this.lastGroup);
 
         if (type === 'extraction') {
-            this.scene.userData.clearSequenceGUI(this.name);
-
             target.userData.startJob('checkForFreeTable');
 
-            this.scene.userData.updateProgressGUI('Optimo', 'remove');
+            this.scene.userData.updateProgressGUI(this.buffer, 'remove', 1);
 
             group.userData.tablesOccupied -= 1;
             group.userData.empty = group.userData.tablesOccupied === 0;
         } else {
-            this.scene.userData.updateProgressGUI('Optimo', 'add');
+            this.scene.userData.updateProgressGUI(this.buffer, 'add', 1);
 
             group.userData.tablesOccupied += 1;
             group.userData.empty = group.userData.tablesOccupied === 0;
@@ -258,9 +264,13 @@ export class Trel {
 
         if (this.requests[0].type === 'introduction') {
             dest.material.color.setHex(0x76E072);
+            
             this.startJob('moveToTable');
         } else {
+            this.scene.userData.updateSequenceGUI(this.name, this.requests[0].carName, this.requests[0].sequence);
+
             dest.material.color.setHex(0x68D7F2);
+
             this.startJob('moveToCell');
         }
     }

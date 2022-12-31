@@ -1,5 +1,3 @@
-import { Car } from "./Car";
-import { COLORS } from "./COLORS";
 
 export class PointTable {
     THREE: any;
@@ -9,7 +7,6 @@ export class PointTable {
     #hall: string[];
     #ms: any;
     #job: any = {};
-    #car: any;
     #sequenced: boolean;
 
     constructor(
@@ -18,7 +15,6 @@ export class PointTable {
         name: string,
         hall: string[],
         ms: any = {},
-        car: any,
         sequenced: boolean
     ) {
         this.THREE = THREE;
@@ -26,7 +22,6 @@ export class PointTable {
         this.#name = name;
         this.#hall = hall;
         this.#ms = ms;
-        this.#car = car;
         this.#sequenced = sequenced;
     }
 
@@ -83,7 +78,7 @@ export class PointTable {
         const introduction = trel.userData.requests.find((request: any) => request.type === 'introduction' && request.started);
         
         if (introduction) {
-            console.log(`[WAITING INTRODUCTION][INTRODUCTION REQUEST][point: ${this.name}][group: ${introduction.group}][cell: ${introduction.cell}]`);
+            console.log(`[POINT_TABLE][WAITING INTRODUCTION][INTRODUCTION REQUEST][point: ${this.name}][group: ${introduction.group}][cell: ${introduction.cell}]`);
             return;
         }
 
@@ -94,7 +89,7 @@ export class PointTable {
         }), { occupied: 0, capacity: 0 });
 
         if (occupied >= capacity - 1) {
-            console.log(`[WAITING CAPACITY EXTEND][INTRODUCTION REQUEST][point: ${this.name}]`);
+            console.log(`[POINT_TABLE][WAITING CAPACITY EXTEND][INTRODUCTION REQUEST][point: ${this.name}]`);
             return;
         };
 
@@ -110,7 +105,7 @@ export class PointTable {
         const cells = this.scene.getObjectByName(randomGroup).children.filter((table: any) => table.userData.empty);
         const randomCell = cells[Math.floor(Math.random() * cells.length)];
 
-        console.log(`[REQUESTED][INTRODUCTION REQUEST][point: ${this.name}][group: ${randomGroup}][cell: ${randomCell.name}][empty:${randomCell.userData.empty} children: ${randomCell.children.length}]`);
+        console.log(`[POINT_TABLE][REQUESTED][INTRODUCTION REQUEST][point: ${this.name}][group: ${randomGroup}][cell: ${randomCell.name}]`);
 
         trel.userData.requests = [ 
             ...trel.userData.requests, { 
@@ -149,6 +144,7 @@ export class PointTable {
 
         if (this.sequenced) {
             this.scene.userData.sequences.shift();
+            this.scene.userData.clearSequenceGUI(`TREL_${this.name.replace(/\D/g, "")}`)
         }
 
         return randomGroup;
@@ -189,38 +185,5 @@ export class PointTable {
                 tablesToCheck[0].parent.userData.startJob('moveBetweenTables');
             }
         }
-    }
-
-    public randomCar() {
-        setInterval(() => {
-            const point = this.scene.getObjectByName(this.name);
-
-            if (!this.empty || point.children.length) return;
-
-            const model = this.#car.clone();
-            const carId = new Date().getTime()
-            const carName = `CAR_${carId}`;
-
-            model.userData = new Car(carId, carName, "idle", null, null, this.name);
-            model.name = carName;
-            model.children[1].visible = false;
-            model.children[2].visible = false;
-            model.children[3].visible = false;
-            model.children[0].children[1].visible = false;
-            model.children[0].children[2].visible = false;
-            model.children[0].children[3].visible = false;
-            model.children[0].children[4].visible = false;
-            model.children[0].children[5].visible = false;
-        
-            const material = model.getObjectByName('Cube').material.clone();
-        
-            material.color.setHex(COLORS[Math.floor(Math.random() * COLORS.length)]);
-        
-            model.getObjectByName('Cube').material = material;
-
-            point.add(model);
-
-            this.startJob('checkForFreeTable');
-        }, 15000);
     }
 }

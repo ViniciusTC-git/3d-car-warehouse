@@ -1,7 +1,7 @@
 import * as THREE from "three"
+import Stats from 'three/examples/jsm/libs/stats.module'
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import Stats from 'three/examples/jsm/libs/stats.module'
 import { Trel } from "./class/Trel";
 import { PointTable } from "./class/PointTable";
 import { Group } from "./class/Group";
@@ -9,7 +9,8 @@ import { Table } from "./class/Table"
 import { PointITrell } from "./class/Point_I_Trell";
 import { Car } from './class/Car';
 import { WarehouseController } from './class/WarehouseController';
-import { COLORS } from './class/COLORS';
+import { COLORS } from './utils/COLORS';
+import { progressCalcu } from './utils/progressCalc';
 
 const carUrl = new URL("../static/SUV.glb", import.meta.url);
 const trelUrl = new URL("../static/trel.json", import.meta.url);
@@ -38,7 +39,6 @@ function createPointTable({
 	hall = [], 
 	ms = {},
 	rotation = Math.PI / 2,
-	car = null,
 	sequenced = false
 }) {
 	const pointTable = new THREE.Mesh( 
@@ -55,7 +55,7 @@ function createPointTable({
 	pointTable.position.set(x, 0, z);
 	pointTable.rotation.y = rotation;
 
-	pointTable.userData = new PointTable(THREE, scene, id, hall, ms, (car ? car.scene.clone() : car), sequenced);
+	pointTable.userData = new PointTable(THREE, scene, id, hall, ms, sequenced);
 
 	scene.add(pointTable);
 }
@@ -82,14 +82,15 @@ function createTrel({
 	name, 
 	x, 
 	z, 
-	groups 
+	groups,
+	buffer
 }) {
 	trel.name = name;
 	trel.position.set(x, 0, z);
 
 	trel.rotateY(1.56);
 
-	trel.userData = new Trel(THREE, scene, id, name, x, z, groups);
+	trel.userData = new Trel(THREE, scene, id, name, x, z, groups, buffer);
 	
 	scene.add(trel);
 }
@@ -237,13 +238,17 @@ function init() {
 		1000
 	);
 
-	camera.position.set( 120, 50, -160);
+	camera.position.set(120, 50, -160);
 
 	const orbit = new OrbitControls(camera, render.domElement);
 
+	orbit.minPolarAngle = 0;
+	orbit.maxPolarAngle =  Math.PI * 0.49;
+	orbit.dampingFactor = 0.25;
+
 	orbit.update();
 
-	const hemiLight = new THREE.HemisphereLight( 0xFFFFFF, 0x444444 );
+	const hemiLight = new THREE.HemisphereLight(0xFFFFFF, 0x444444);
 
 	hemiLight.position.set(0, 20, 0);
 
@@ -261,10 +266,10 @@ function init() {
 
 		objLoader.load(trelUrl.href, (trel) => {
 			createPointITrel({ id: 1, trel: trel.clone(), name: "TREL_POINT_I", x: 8, z: -56, points: ["ME_03", "ME_04"] });
-			createTrel({ id: 1,  trel: trel.clone(), name: "TREL_01", x: -48, z: -4, groups: ["GROUP_01", "GROUP_02"] });
-			createTrel({ id: 2, trel: trel.clone(), name: "TREL_02", x: -48, z: -20, groups: ["GROUP_03", "GROUP_04"] });
-			createTrel({ id: 3, trel: trel.clone(), name: "TREL_03", x: 27, z: -36, groups: ["GROUP_05", "GROUP_06"] });
-			createTrel({ id: 4, trel: trel.clone(), name: "TREL_04", x: 27, z: -52, groups: ["GROUP_07", "GROUP_08"] });
+			createTrel({ id: 1,  trel: trel.clone(), name: "TREL_01", x: -48, z: -4, groups: ["GROUP_01", "GROUP_02"], buffer: 'Optimo' });
+			createTrel({ id: 2, trel: trel.clone(), name: "TREL_02", x: -48, z: -20, groups: ["GROUP_03", "GROUP_04"], buffer: 'Optimo' });
+			createTrel({ id: 3, trel: trel.clone(), name: "TREL_03", x: 27, z: -36, groups: ["GROUP_05", "GROUP_06"], buffer: 'Optimo' });
+			createTrel({ id: 4, trel: trel.clone(), name: "TREL_04", x: 27, z: -52, groups: ["GROUP_07", "GROUP_08"], buffer: 'Optimo' });
 		});
 
 		createLine({ 
@@ -446,12 +451,8 @@ function init() {
 					color: 0x479ecc,
 					opacity: 0.4,
 					...(
-						tableIndex === 0 ? {
-							onRemoveCar: (scene) => scene.userData.updateProgressGUI('K110', 'remove') 
-						} :
-						tableIndex === 22 ? { 
-							onAddCar: (scene) => scene.userData.updateProgressGUI('K110', 'add') 
-						}  : {}
+						tableIndex === 0 ? { onRemoveCar: (scene) => scene.userData.updateProgressGUI('K110', 'remove', 1) } :
+						tableIndex === 22 ? { onAddCar: (scene) => scene.userData.updateProgressGUI('K110', 'add', 1) }  : {}
 					)
 				}
 			}), {})
@@ -520,7 +521,7 @@ function init() {
 			}), {})
 		});
 
-		createPointTable({ id: "POINT_I", x: -56, z: -56, hall: ["POINT_I_HALL", "INTRODUCTION_HALL_1"], ms: { range: 3, startAt: 0 }, car });
+		createPointTable({ id: "POINT_I", x: -56, z: -56, hall: ["POINT_I_HALL", "INTRODUCTION_HALL_1"], ms: { range: 3, startAt: 0 } });
 		createPointTable({ id: "ME_01", x: -56, z: -8, hall: ["GROUP_01", "GROUP_02"] });
 		createPointTable({ id: "ME_02", x: -56, z: -24, hall: ["GROUP_03", "GROUP_04"]});
 		createPointTable({ id: "ME_03", x: 18, z: -40, hall: ["GROUP_05", "GROUP_06"] });
@@ -530,18 +531,31 @@ function init() {
 		createPointTable({ id: "MS_03", x: 72, z: -40, hall: ["MS_HALL"], ms: { range: 7, startAt: 6 }, sequenced: true });
 		createPointTable({ id: "MS_04", x: 72, z: -56, hall: ["MS_HALL"], ms: { range: 10, startAt: 9 }, sequenced: true });		
 		createPointTable({ id: "PK", x: 78.4, z: -65, rotation: Math.PI / -2, hall: ["PK_HALL"], ms: { range: 1, startAt: 0 } });
-		
+
 		scene.userData = new WarehouseController(
 			THREE, 
 			scene, 
+			car.scene.clone(),
 			document, 
 			["TREL_01","TREL_02","TREL_03","TREL_04"], 
 			["GROUP_01","GROUP_02","GROUP_03","GROUP_04","GROUP_05","GROUP_06","GROUP_07","GROUP_08"],
-			128
+			["POINT_I"],
+			["ME_01", "ME_02", "ME_03", "ME_04"],
+			["MS_01", "MS_02", "MS_03", "MS_04"],
+			["PK"],
+			{
+				['K110']: {
+					hallNames: ["PK"],
+					totalCapacity: 23,
+					progressCalcu
+				},
+				['Optimo']: {
+					hallNames: ["GROUP_01","GROUP_02","GROUP_03","GROUP_04","GROUP_05","GROUP_06","GROUP_07","GROUP_08"],
+					totalCapacity: 128, // degree - 1 why ? because safe cell !
+					progressCalcu
+				}
+			}
 		);
-
-		scene.getObjectByName("POINT_I").userData.randomCar();
-
 	}, undefined, function(error) {
 		console.log(error)
 	});

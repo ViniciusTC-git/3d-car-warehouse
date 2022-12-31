@@ -129,73 +129,66 @@ export class Group {
     public moveBetweenTables() {
         const hall = this.scene.getObjectByName(this.name);
         const tables = hall.children;
-    
-        let lastIndex = null;
+        const occupiedTables = tables
+            .reduce((acc: any, table: any, tableIndex: number) => ({
+                ...acc,
+                ...(!table.userData.empty ? { [tableIndex]: table } : {})
+            }), {});
+        const occupiedTablesMapped = Object.entries(occupiedTables) as any;
 
-        for (let i = 0; i < tables.length; i++) {
-            const currentTable = tables[i];
+        for (let [tableIndex, table] of occupiedTablesMapped) {
+            tableIndex = +tableIndex;
 
-            if (!currentTable.userData.empty && i !== lastIndex) {
-                const currentTable = tables[i];
-                const carBody = currentTable.children[0].clone();
-                const nextTable = tables[i + 1];
+            const exitTableIndex = this.exitTables.indexOf(table.name);
 
-                if (!nextTable) {
-                    if (this.point) {
-                        this.startJob("checkForFreePoint", { jobId: carBody.name, carBody: carBody }, 1000);
-                    } else if (this.nextHall) {
-                        currentTable.userData.startJob("checkForFreeTable");
-                    } else if (this.exitTables.includes(currentTable.name)) {
-                        this.scene
-                            .getObjectByName(this.name)
-                            .getObjectByName(currentTable.name)
-                            .userData
-                            .startJob('checkForFreePoint');
-                    } else {
-                        currentTable.clear();
+            if (exitTableIndex !== -1) {
+                const exitTable = this.exitTables[exitTableIndex];
+                const nextExitTable = this.exitTables[exitTableIndex + 1];
+                const startJob = (
+                    nextExitTable && 
+                    tables
+                        .slice(+exitTable.replace(/\D/g, "") + 1, +nextExitTable.replace(/\D/g, "") + 1)
+                        .every((table: any) => table.userData.empty)
+                );
 
-                        currentTable.userData.empty = true;
+                if (!startJob) {
+                    table.userData.startJob('checkForFreePoint');
 
-                        if (currentTable.userData.onRemoveCar) currentTable.userData.onRemoveCar(this.scene);
-                    }
-
-                    break;
-                } else {
-                    if (!nextTable.userData.empty) continue;
-
-                    const exitTableIndex = this.exitTables.indexOf(currentTable.name);
-
-                    if (exitTableIndex !== -1) {
-                        const exitTable = this.exitTables[exitTableIndex];
-                        const nextExitTable = this.exitTables[exitTableIndex + 1];
-                        const startJob = (
-                            nextExitTable && 
-                            tables
-                                .slice(+exitTable.replace(/\D/g, "") + 1, +nextExitTable.replace(/\D/g, "") + 1)
-                                .every((table: any) => table.userData.empty)
-                        );
-
-                        if (!startJob) {
-                            this.scene.getObjectByName(this.name).getObjectByName(exitTable).userData.startJob('checkForFreePoint');
-
-                            continue;
-                        }
-                    }
-
-                    currentTable.clear();
-
-                    currentTable.userData.empty = true;
-
-                    nextTable.add(carBody);
-
-                    nextTable.userData.empty = false;
-                    nextTable.userData.carBody = carBody.name;
-        
-                    lastIndex = i + 1;
+                    continue;
                 }
             }
+
+            const carBody = table.children[0].clone();
+            const nextTable = tables[tableIndex + 1];
+
+            if (!nextTable) {
+                if (this.point) {
+                    this.startJob("checkForFreePoint", { jobId: carBody.name, carBody: carBody }, 1000);
+                } else if (this.nextHall) {
+                    table.userData.startJob("checkForFreeTable");
+                } else {
+                    table.clear();
+
+                    table.userData.empty = true;
+
+                    if (table.userData.onRemoveCar) table.userData.onRemoveCar(this.scene);
+                }
+
+                break;
+            } else if (!nextTable.userData.empty) {
+                continue;
+            } else {
+                table.clear();
+
+                table.userData.empty = true;
+
+                nextTable.add(carBody);
+
+                nextTable.userData.empty = false;
+                nextTable.userData.carBody = carBody.name;
+            }
         }
-    
-        if (tables.length === 0) this.clearJob("moveBetweenTables");
+
+        if (tables.every((table: any) => table.userData.empty)) this.clearJob("moveBetweenTables");
     }
 }
