@@ -263,13 +263,14 @@ export class Trel {
         this.lastPoint = this.requests[0].point;
         this.lastGroup = this.requests[0].group;
         this.lastTable = this.requests[0].cell;
+        this.lastCarBody = this.requests[0].carName;
 
-        const dest = this.scene.getObjectByName(this.lastGroup).getObjectByName(this.lastTable);
+        const destination = this.scene.getObjectByName(this.lastGroup).getObjectByName(this.lastTable);
 
         if (this.requests[0].type === 'introduction') {
             console.log(`[TREL][REQUESTED][INTRODUCTION REQUEST][${this.name}][${this.lastGroup}][${this.lastTable}][${this.requests[0].carName}]`);
 
-            dest.material.color.setHex(0x76E072);
+            destination.material.color.setHex(0x76E072);
             
             this.startJob('moveToTable');
         } else {
@@ -277,7 +278,7 @@ export class Trel {
 
             this.scene.userData.updateSequenceGUI(this.name, this.requests[0].carName, this.requests[0].sequence);
 
-            dest.material.color.setHex(0x68D7F2);
+            destination.material.color.setHex(0x68D7F2);
 
             this.startJob('moveToCell');
         }

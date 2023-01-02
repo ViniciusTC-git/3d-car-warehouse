@@ -84,11 +84,11 @@ export class PointTable {
 
         const { occupied, capacity } = this.hall.reduce((acc: any, group: any) => ({
             ...acc,
-            occupied: acc['occupied'] + this.scene.getObjectByName(group).userData.tablesOccupied,
-            capacity: acc['capacity'] + this.scene.getObjectByName(group).userData.capacity 
+            occupied: acc.occupied + this.scene.getObjectByName(group).userData.tablesOccupied,
+            capacity: acc.capacity + this.scene.getObjectByName(group).userData.capacity 
         }), { occupied: 0, capacity: 0 });
 
-        if (occupied >= capacity - 1) {
+        if (occupied === capacity - 1) {
             console.log(`[POINT_TABLE][WAITING CAPACITY EXTEND][INTRODUCTION REQUEST][${this.name}]`);
             return;
         };
@@ -156,36 +156,30 @@ export class PointTable {
         const group = this.checkForFreeHall(jobId);
 
         if (group) {
-            const tablesToCheck = group.children;
-            
-            const { startAt } = this.ms;
-
             const point = this.scene.getObjectByName(this.name);
             const carBody = point.children[0].clone();
 
-            tablesToCheck[startAt].add(carBody);
-            tablesToCheck[startAt].userData.carBody = carBody.name;
-            tablesToCheck[startAt].userData.empty = false;
-
-            if (tablesToCheck[startAt].userData.onAddCar) {
-                tablesToCheck[startAt].userData.onAddCar(this.scene);
-            }
-
-            if (point.userData.onRemoveCar) {
-                point.userData.onRemoveCar(this.scene);
-            }
-
-            point.clear();
-
             carBody.userData.status = "moving";
+
+            const tableToAdd = group.children[this.ms.startAt];
+
+            tableToAdd.add(carBody);
+
+            tableToAdd.userData.carBody = carBody.name;
+            tableToAdd.userData.empty = false;
+
+            if (tableToAdd.userData.onAddCar) tableToAdd.userData.onAddCar(this.scene);
+
+            if (point.userData.onRemoveCar) point.userData.onRemoveCar(this.scene);
+            
+            point.clear();
 
             this.clearJob(jobId);
 
             this.empty = true;
 
-            if (!tablesToCheck[0].parent.userData.job['moveBetweenTables']) {
-                tablesToCheck[0].parent.userData.startJob('moveBetweenTables');
-            }
+            if (!group.userData.job['moveBetweenTables']) group.userData.startJob('moveBetweenTables');
+            
         }
     }
 }
