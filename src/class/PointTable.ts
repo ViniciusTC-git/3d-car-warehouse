@@ -155,31 +155,30 @@ export class PointTable {
     private checkForFreeTable(jobId: number) {
         const group = this.checkForFreeHall(jobId);
 
-        if (group) {
-            const point = this.scene.getObjectByName(this.name);
-            const carBody = point.children[0].clone();
+        if (!group) return;
 
-            carBody.userData.status = "moving";
+        const point = this.scene.getObjectByName(this.name);
+        const carBody = point.children[0].clone();
 
-            const tableToAdd = group.children[this.ms.startAt];
+        carBody.userData.status = "moving";
 
-            tableToAdd.add(carBody);
+        const tableToAdd = group.children[this.ms.startAt];
 
-            tableToAdd.userData.carBody = carBody.name;
-            tableToAdd.userData.empty = false;
+        tableToAdd.add(carBody);
 
-            if (tableToAdd.userData.onAddCar) tableToAdd.userData.onAddCar(this.scene);
+        tableToAdd.userData.carBody = carBody.name;
+        tableToAdd.userData.empty = false;
 
-            if (point.userData.onRemoveCar) point.userData.onRemoveCar(this.scene);
-            
-            point.clear();
+        if (tableToAdd.userData.onAddCar) tableToAdd.userData.onAddCar(this.scene);
 
-            this.clearJob(jobId);
+        if (point.userData.onRemoveCar) point.userData.onRemoveCar(this.scene);
+        
+        point.clear();
 
-            this.empty = true;
+        this.clearJob(jobId);
 
-            if (!group.userData.job['moveBetweenTables']) group.userData.startJob('moveBetweenTables');
-            
-        }
+        this.empty = true;
+
+        if (!group.userData.job['moveBetweenTables']) group.userData.startJob('moveBetweenTables');
     }
 }

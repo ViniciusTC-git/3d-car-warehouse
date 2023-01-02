@@ -219,7 +219,7 @@ export class Trel {
             this.scene.getObjectByName(this.lastGroup).getObjectByName(this.lastTable) :
             this.scene.getObjectByName(this.lastPoint) 
         );
-        const dest = this.scene.getObjectByName(this.lastGroup).getObjectByName(this.lastTable);
+        const destination = this.scene.getObjectByName(this.lastGroup).getObjectByName(this.lastTable);
 
         const carBody = trel.children[0].children[0].clone();
 
@@ -233,7 +233,7 @@ export class Trel {
 
         carBody.userData.status = 'idle';
 
-        dest.material.color.setHex(0xB3AFAF);
+        destination.material.color.setHex(0xB3AFAF);
 
         const group = this.scene.getObjectByName(this.lastGroup);
 

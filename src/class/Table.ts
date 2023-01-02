@@ -116,32 +116,29 @@ export class Table {
 
         const randomGroup = groups[Math.floor(Math.random() * groups.length)];
 
-        const tablesToCheck = randomGroup.children;
+        const point = this.scene.getObjectByName(this.group).getObjectByName(this.name);
+        const carBody = point.children[0].clone();
 
-        if (tablesToCheck.length) {
-            const point = this.scene.getObjectByName(this.group).getObjectByName(this.name);
-            const carBody = point.children[0].clone();
+        carBody.userData.status = "moving";
 
-            tablesToCheck[startAt].add(carBody);
-            tablesToCheck[startAt].userData.carBody = carBody.name;
-            tablesToCheck[startAt].userData.empty = false;
+        const tableToAdd = randomGroup.children[startAt];
 
-            if (tablesToCheck[startAt].userData.onAddCar) tablesToCheck[startAt].userData.onAddCar(this.scene);
-          
-            if (point.userData.onRemoveCar) point.userData.onRemoveCar(this.scene);
+        tableToAdd.add(carBody);
 
-            point.clear();
+        tableToAdd.userData.carBody = carBody.name;
+        tableToAdd.userData.empty = false;
 
-            carBody.userData.status = "moving";
+        if (tableToAdd.userData.onAddCar) tableToAdd.userData.onAddCar(this.scene);
 
-            this.clearJob();
+        if (point.userData.onRemoveCar) point.userData.onRemoveCar(this.scene);
 
-            this.empty = true;
+        point.clear();
 
-            if (!randomGroup.userData.job['moveBetweenTables']) {
-                randomGroup.userData.startJob('moveBetweenTables');
-            }
-        }
+        this.clearJob();
+
+        this.empty = true;
+
+        if (!randomGroup.userData.job['moveBetweenTables']) randomGroup.userData.startJob('moveBetweenTables');
     }
 
     private checkForFreePoint() {
