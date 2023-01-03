@@ -1,0 +1,1632 @@
+
+StatusOUT[
+    {
+        "MS01_OPERACAO": 1
+    },
+    {
+        "MS01_STATUS_PLC": 1
+    },
+    {
+        "MS01_REQUEST_JOB": false
+    },
+    {
+        "MS02_OPERACAO": 1
+    },
+    {
+        "MS02_STATUS_PLC": 1
+    },
+    {
+        "MS02_REQUEST_JOB": false
+    },
+    {
+        "MS03_OPERACAO": 1
+    },
+    {
+        "MS03_STATUS_PLC": 1
+    },
+    {
+        "MS03_REQUEST_JOB": false
+    },
+    {
+        "MS04_OPERACAO": 1
+    },
+    {
+        "MS04_STATUS_PLC": 1
+    },
+    {
+        "MS04_REQUEST_JOB": false
+    },
+    {
+        "KP01_OPERACAO": 1
+    },
+    {
+        "KP01_STATUS_PLC": 1
+    },
+    {
+        "KP01_REQUEST_JOB": false
+    }
+]
+
+StatusTREL2{
+    "TREL2_CAR": {
+        "FANLAGE0": "ANCGA2"
+    },
+    "TREL2_POS": 0,
+    "TR02_FULL_STRING": "*RI*TR02*0000*        *000000*000000*00000000000000000*",
+    "TR02_OPERACAO": 1,
+    "TR02_STATUS_PLC": 0,
+    "TR02_COMANDO": 0,
+    "TR02_REQUEST_JOB": false,
+    "TR02_COMPLETED": false,
+    "TR02_ACKPLC": false
+}
+StatusTREL3{
+    "TREL3_CAR": {
+        "FANLAGE0": "ANCGA3"
+    },
+    "TREL3_POS": 10,
+    "TR03_FULL_STRING": "*RI*TR03*0000*        *000000*000000*00000000000000000*",
+    "TR03_OPERACAO": 1,
+    "TR03_STATUS_PLC": 0,
+    "TR03_COMANDO": 0,
+    "TR03_REQUEST_JOB": true,
+    "TR03_COMPLETED": false,
+    "TR03_ACKPLC": false
+}
+StatusTREL4{
+    "TREL4_CAR": {
+        "FANLAGE0": "ANCGA4"
+    },
+    "TREL4_POS": 8,
+    "TR04_FULL_STRING": "*RI*TR04*0000*        *000000*000000*00000000000000000*",
+    "TR04_OPERACAO": 1,
+    "TR04_STATUS_PLC": 1,
+    "TR04_COMANDO": 0,
+    "TR04_REQUEST_JOB": false,
+    "TR04_COMPLETED": false,
+    "TR04_ACKPLC": false
+}
+
+
+StatusTREL1{
+    "TREL1_CAR": {
+        "FANLAGE0": "ANCGA1"
+    },
+    "TREL1_POS": 0,
+    "TR01_FULL_STRING": "*RI*TR01*0000*        *000000*000000*00000000000000000*",
+    "TR01_OPERACAO": 1,
+    "TR01_STATUS_PLC": 0,
+    "TR01_COMANDO": 0,
+    "TR01_REQUEST_JOB": true,
+    "TR01_COMPLETED": false,
+    "TR01_ACKPLC": false
+}
+TablesOut[
+    {
+        "DT102": {}
+    },
+    {
+        "DT105": {}
+    },
+    {
+        "DT202": {}
+    },
+    {
+        "DT205": {}
+    },
+    {
+        "RB208": {}
+    },
+    {
+        "RB209": {}
+    },
+    {
+        "RB301": {}
+    },
+    {
+        "RB302": {}
+    },
+    {
+        "RB303": {}
+    },
+    {
+        "RB304": {}
+    },
+    {
+        "RB305": {}
+    },
+    {
+        "RB306": {}
+    },
+    {
+        "RB307": {}
+    },
+    {
+        "RB308": {}
+    },
+    {
+        "RB309": {}
+    },
+    {
+        "RB310": {}
+    },
+    {
+        "RB311": {}
+    },
+    {
+        "RB312": {}
+    },
+    {
+        "RB313": {}
+    },
+    {
+        "RB314": {}
+    },
+    {
+        "RB315": {}
+    },
+    {
+        "RB316": {}
+    },
+    {
+        "RB317": {}
+    },
+    {
+        "RB318": {}
+    },
+    {
+        "RB319": {}
+    },
+    {
+        "RB320": {}
+    },
+    {
+        "RB321": {}
+    },
+    {
+        "RB322": {}
+    },
+    {
+        "RB323": {}
+    },
+    {
+        "RB324": {}
+    }
+]
+RKAA_01{
+    "knr": "",
+    "seq": ""
+}
+RKAA_02{
+    "knr": "",
+    "seq": ""
+}
+RKAA_03{
+    "knr": "",
+    "seq": ""
+}
+RKAA_04{
+    "knr": "",
+    "seq": ""
+}
+ANCGA1[
+    {
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 1,
+        "Z": 0
+    },
+    {
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 2,
+        "Z": 0
+    },
+    {
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 3,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0315084",
+        "KANR0": "7500621",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "A1A1",
+        "VZLAND": "VY ",
+        "MODELL": "BZ32",
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 4,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0345502",
+        "KANR0": "7500006",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "7Z7Z",
+        "VZLAND": "VY ",
+        "MODELL": "BZ42",
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 5,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2022",
+        "KNR": "4953050",
+        "KANR0": "6500034",
+        "WERK0": "51",
+        "SPJ0": "2022",
+        "FARBAU": "7Q7Q",
+        "VZLAND": "VY ",
+        "MODELL": "5UD6",
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 6,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0344233",
+        "KANR0": "6500067",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "B4B4",
+        "VZLAND": "VY ",
+        "MODELL": "5UFT",
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 7,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2022",
+        "KNR": "5013056",
+        "KANR0": "6501408",
+        "WERK0": "51",
+        "SPJ0": "2022",
+        "FARBAU": "2R2R",
+        "VZLAND": "VR ",
+        "MODELL": "5UD6",
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 8,
+        "Z": 0
+    },
+    {
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 9,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2022",
+        "KNR": "5022771",
+        "KANR0": "7500319",
+        "WERK0": "51",
+        "SPJ0": "2022",
+        "FARBAU": "6K6K",
+        "VZLAND": "VY ",
+        "MODELL": "CH14",
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 10,
+        "Z": 0
+    },
+    {
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 11,
+        "Z": 0
+    },
+    {
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 12,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0325123",
+        "KANR0": "7501502",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "2R2R",
+        "VZLAND": "VY ",
+        "MODELL": "BZ38",
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 13,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2022",
+        "KNR": "5032518",
+        "KANR0": "7500504",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "C2C2",
+        "VZLAND": "VY ",
+        "MODELL": "CH14",
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 14,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2022",
+        "KNR": "5032506",
+        "KANR0": "7500620",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "B4B4",
+        "VZLAND": "VY ",
+        "MODELL": "CH13",
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 15,
+        "Z": 0
+    },
+    {
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 16,
+        "Z": 0
+    },
+    {
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 17,
+        "Z": 0
+    },
+    {
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 18,
+        "Z": 0
+    },
+    {
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 19,
+        "Z": 0
+    },
+    {
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 20,
+        "Z": 0
+    },
+    {
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 21,
+        "Z": 0
+    },
+    {
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 22,
+        "Z": 0
+    },
+    {
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 23,
+        "Z": 0
+    },
+    {
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 24,
+        "Z": 0
+    },
+    {
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+    },
+    {
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 2,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0435517",
+        "KANR0": "7481928",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "7Z7Z",
+        "VZLAND": "VY ",
+        "MODELL": "BZ44",
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 3,
+        "Z": 1
+    },
+    {
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 4,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0415511",
+        "KANR0": "7500018",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "7Z7Z",
+        "VZLAND": "VY ",
+        "MODELL": "BZ42",
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 5,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0415504",
+        "KANR0": "7500014",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "7Z7Z",
+        "VZLAND": "VY ",
+        "MODELL": "BZ42",
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 6,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0314087",
+        "KANR0": "6494503",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "B4B4",
+        "VZLAND": "ME ",
+        "MODELL": "5UFN",
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 7,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0425506",
+        "KANR0": "7500024",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "7Z7Z",
+        "VZLAND": "VY ",
+        "MODELL": "BZ42",
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 8,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2022",
+        "KNR": "4953053",
+        "KANR0": "6500030",
+        "WERK0": "51",
+        "SPJ0": "2022",
+        "FARBAU": "B4B4",
+        "VZLAND": "VY ",
+        "MODELL": "5UD6",
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 9,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0455518",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "KANR1": "7481935",
+        "FARBAU": "7Z7Z",
+        "VZLAND": "VY ",
+        "MODELL": "BZ44",
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 10,
+        "Z": 1
+    },
+    {
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 11,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2022",
+        "KNR": "4953058",
+        "KANR0": "6494375",
+        "WERK0": "51",
+        "SPJ0": "2022",
+        "FARBAU": "7Z7Z",
+        "VZLAND": "VY ",
+        "MODELL": "5UD6",
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 12,
+        "Z": 1
+    },
+    {
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 13,
+        "Z": 1
+    },
+    {
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 14,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2022",
+        "KNR": "4953080",
+        "KANR0": "6494518",
+        "WERK0": "51",
+        "SPJ0": "2022",
+        "FARBAU": "7Z7Z",
+        "VZLAND": "VY ",
+        "MODELL": "5UD6",
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 15,
+        "Z": 1
+    },
+    {
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 16,
+        "Z": 1
+    },
+    {
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 17,
+        "Z": 1
+    },
+    {
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 18,
+        "Z": 1
+    },
+    {
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 19,
+        "Z": 1
+    },
+    {
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 20,
+        "Z": 1
+    },
+    {
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 21,
+        "Z": 1
+    },
+    {
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 22,
+        "Z": 1
+    },
+    {
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 23,
+        "Z": 1
+    },
+    {
+        "FANLAGE0": "ANCGA1",
+        "X": 1,
+        "Y": 24,
+        "Z": 1
+    }
+]
+ANCGA2[
+    {
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 1,
+        "Z": 0
+    },
+    {
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 2,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2022",
+        "KNR": "5013039",
+        "KANR0": "6501423",
+        "WERK0": "51",
+        "SPJ0": "2022",
+        "FARBAU": "2R2R",
+        "VZLAND": "VR ",
+        "MODELL": "5UDT",
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 3,
+        "Z": 0
+    },
+    {
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 4,
+        "Z": 0
+    },
+    {
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 5,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2022",
+        "KNR": "4677008",
+        "WERK0": "51",
+        "SPJ0": "2022",
+        "KANR1": "6335605",
+        "FARBAU": "B4B4",
+        "VZLAND": "BY ",
+        "MODELL": "5UK8",
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 6,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0314037",
+        "KANR0": "6494522",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "7Z7Z",
+        "VZLAND": "VY ",
+        "MODELL": "5UFT",
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 7,
+        "Z": 0
+    },
+    {
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 8,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0435518",
+        "KANR0": "7490554",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "7Z7Z",
+        "VZLAND": "VY ",
+        "MODELL": "BZ43",
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 9,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0315082",
+        "KANR0": "7500170",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "2R2R",
+        "VZLAND": "VY ",
+        "MODELL": "BZ38",
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 10,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0332562",
+        "KANR0": "7500212",
+        "WERK0": "51",
+        "SPJ0": "2022",
+        "FARBAU": "A1A1",
+        "VZLAND": "PE ",
+        "MODELL": "CH13",
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 11,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0322532",
+        "KANR0": "7501455",
+        "WERK0": "51",
+        "SPJ0": "2022",
+        "FARBAU": "6K6K",
+        "VZLAND": "ME ",
+        "MODELL": "CH14",
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 12,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2022",
+        "KNR": "4953056",
+        "KANR0": "6494373",
+        "WERK0": "51",
+        "SPJ0": "2022",
+        "FARBAU": "7Z7Z",
+        "VZLAND": "VY ",
+        "MODELL": "5UD6",
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 13,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2022",
+        "KNR": "5022792",
+        "KANR0": "7500342",
+        "WERK0": "51",
+        "SPJ0": "2022",
+        "FARBAU": "A1A1",
+        "VZLAND": "VY ",
+        "MODELL": "CH13",
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 14,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2022",
+        "KNR": "4953067",
+        "KANR0": "6500089",
+        "WERK0": "51",
+        "SPJ0": "2022",
+        "FARBAU": "A1A1",
+        "VZLAND": "VY ",
+        "MODELL": "5UD6",
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 15,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0325143",
+        "KANR0": "7501498",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "2R2R",
+        "VZLAND": "VY ",
+        "MODELL": "BZ33",
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 16,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2022",
+        "KNR": "4953070",
+        "KANR0": "6494381",
+        "WERK0": "51",
+        "SPJ0": "2022",
+        "FARBAU": "7Z7Z",
+        "VZLAND": "VY ",
+        "MODELL": "5UD6",
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 17,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2022",
+        "KNR": "5032544",
+        "KANR0": "7500385",
+        "WERK0": "51",
+        "SPJ0": "2022",
+        "FARBAU": "2R2R",
+        "VZLAND": "VY ",
+        "MODELL": "CH14",
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 18,
+        "Z": 0
+    },
+    {
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 19,
+        "Z": 0
+    },
+    {
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 20,
+        "Z": 0
+    },
+    {
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 21,
+        "Z": 0
+    },
+    {
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 22,
+        "Z": 0
+    },
+    {
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 23,
+        "Z": 0
+    },
+    {
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 24,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0425524",
+        "KANR0": "7490549",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "7Z7Z",
+        "VZLAND": "VY ",
+        "MODELL": "BZ43",
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0315117",
+        "KANR0": "7501415",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "A1A1",
+        "VZLAND": "VY ",
+        "MODELL": "BZ32",
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 2,
+        "Z": 1
+    },
+    {
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 3,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0425517",
+        "KANR0": "7481924",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "7Z7Z",
+        "VZLAND": "VY ",
+        "MODELL": "BZ44",
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 4,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0344173",
+        "KANR0": "6500095",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "B4B4",
+        "VZLAND": "VY ",
+        "MODELL": "5UFT",
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 5,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0415506",
+        "KANR0": "7500015",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "7Z7Z",
+        "VZLAND": "VY ",
+        "MODELL": "BZ42",
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 6,
+        "Z": 1
+    },
+    {
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 7,
+        "Z": 1
+    },
+    {
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 8,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2022",
+        "KNR": "4953077",
+        "KANR0": "6500120",
+        "WERK0": "51",
+        "SPJ0": "2022",
+        "FARBAU": "A1A1",
+        "VZLAND": "VY ",
+        "MODELL": "5UD6",
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 9,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0315096",
+        "KANR0": "7494480",
+        "WERK0": "51",
+        "SPJ0": "2022",
+        "FARBAU": "2R2R",
+        "VZLAND": "VY ",
+        "MODELL": "BZ38",
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 10,
+        "Z": 1
+    },
+    {
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 11,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2022",
+        "KNR": "5022546",
+        "KANR0": "7494749",
+        "WERK0": "51",
+        "SPJ0": "2022",
+        "FARBAU": "C2A1",
+        "VZLAND": "VY ",
+        "MODELL": "CH14",
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 12,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2022",
+        "KNR": "5022817",
+        "KANR0": "7500597",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "B4B4",
+        "VZLAND": "VY ",
+        "MODELL": "CH13",
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 13,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2022",
+        "KNR": "5022796",
+        "KANR0": "7500557",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "2R2R",
+        "VZLAND": "VY ",
+        "MODELL": "CH14",
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 14,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2022",
+        "KNR": "5032598",
+        "KANR0": "7501575",
+        "WERK0": "51",
+        "SPJ0": "2022",
+        "FARBAU": "2R2R",
+        "VZLAND": "VY ",
+        "MODELL": "CH14",
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 15,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2022",
+        "KNR": "4953062",
+        "KANR0": "6500096",
+        "WERK0": "51",
+        "SPJ0": "2022",
+        "FARBAU": "B4B4",
+        "VZLAND": "VY ",
+        "MODELL": "5UD6",
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 16,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2022",
+        "KNR": "5032526",
+        "KANR0": "7501449",
+        "WERK0": "51",
+        "SPJ0": "2022",
+        "FARBAU": "6K6K",
+        "VZLAND": "VY ",
+        "MODELL": "CH14",
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 17,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2022",
+        "KNR": "5032554",
+        "KANR0": "7501469",
+        "WERK0": "51",
+        "SPJ0": "2022",
+        "FARBAU": "2R2R",
+        "VZLAND": "VY ",
+        "MODELL": "CH13",
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 18,
+        "Z": 1
+    },
+    {
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 19,
+        "Z": 1
+    },
+    {
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 20,
+        "Z": 1
+    },
+    {
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 21,
+        "Z": 1
+    },
+    {
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 22,
+        "Z": 1
+    },
+    {
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 23,
+        "Z": 1
+    },
+    {
+        "FANLAGE0": "ANCGA2",
+        "X": 1,
+        "Y": 24,
+        "Z": 1
+    }
+]
+ANCGA3[
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0314020",
+        "KANR0": "6494290",
+        "WERK0": "51",
+        "SPJ0": "2022",
+        "FARBAU": "B4B4",
+        "VZLAND": "ME ",
+        "MODELL": "5UFN",
+        "FANLAGE0": "ANCGA3",
+        "X": 1,
+        "Y": 1,
+        "Z": 0
+    },
+    {
+        "FANLAGE0": "ANCGA3",
+        "X": 1,
+        "Y": 2,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0315105",
+        "KANR0": "7500593",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "B4B4",
+        "VZLAND": "VY ",
+        "MODELL": "BZ32",
+        "FANLAGE0": "ANCGA3",
+        "X": 1,
+        "Y": 3,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0415515",
+        "KANR0": "7500020",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "7Z7Z",
+        "VZLAND": "VY ",
+        "MODELL": "BZ42",
+        "FANLAGE0": "ANCGA3",
+        "X": 1,
+        "Y": 4,
+        "Z": 0
+    },
+    {
+        "FANLAGE0": "ANCGA3",
+        "X": 1,
+        "Y": 5,
+        "Z": 0
+    },
+    {
+        "FANLAGE0": "ANCGA3",
+        "X": 1,
+        "Y": 6,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0315119",
+        "KANR0": "7500521",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "B4B4",
+        "VZLAND": "VY ",
+        "MODELL": "BZ32",
+        "FANLAGE0": "ANCGA3",
+        "X": 1,
+        "Y": 7,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0425518",
+        "KANR0": "7490545",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "7Z7Z",
+        "VZLAND": "VY ",
+        "MODELL": "BZ43",
+        "FANLAGE0": "ANCGA3",
+        "X": 1,
+        "Y": 8,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0315116",
+        "KANR0": "7500553",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "6K6K",
+        "VZLAND": "VY ",
+        "MODELL": "BZ32",
+        "FANLAGE0": "ANCGA3",
+        "X": 1,
+        "Y": 9,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0335060",
+        "KANR0": "7501487",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "B4B4",
+        "VZLAND": "VY ",
+        "MODELL": "BZ32",
+        "FANLAGE0": "ANCGA3",
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0435502",
+        "KANR0": "7481925",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "7Z7Z",
+        "VZLAND": "VY ",
+        "MODELL": "BZ44",
+        "FANLAGE0": "ANCGA3",
+        "X": 1,
+        "Y": 2,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0315111",
+        "KANR0": "7500505",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "A1A1",
+        "VZLAND": "VY ",
+        "MODELL": "BZ32",
+        "FANLAGE0": "ANCGA3",
+        "X": 1,
+        "Y": 3,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2022",
+        "KNR": "5015022",
+        "KANR0": "7490464",
+        "WERK0": "51",
+        "SPJ0": "2022",
+        "FARBAU": "6K6K",
+        "VZLAND": "VY ",
+        "MODELL": "BZ32",
+        "FANLAGE0": "ANCGA3",
+        "X": 1,
+        "Y": 4,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0325097",
+        "KANR0": "7501523",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "2R2R",
+        "VZLAND": "VY ",
+        "MODELL": "BZ38",
+        "FANLAGE0": "ANCGA3",
+        "X": 1,
+        "Y": 5,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2022",
+        "KNR": "5015100",
+        "WERK0": "51",
+        "SPJ0": "2022",
+        "KANR1": "7490472",
+        "FARBAU": "B4B4",
+        "VZLAND": "VY ",
+        "MODELL": "BZ38",
+        "FANLAGE0": "ANCGA3",
+        "X": 1,
+        "Y": 6,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0315094",
+        "KANR0": "7495221",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "A1A1",
+        "VZLAND": "VY ",
+        "MODELL": "BZ38",
+        "FANLAGE0": "ANCGA3",
+        "X": 1,
+        "Y": 7,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2021",
+        "KNR": "3773006",
+        "WERK0": "51",
+        "SPJ0": "2021",
+        "KANR1": "6180205",
+        "FARBAU": "B4B4",
+        "VZLAND": "BY ",
+        "MODELL": "5UD6",
+        "FANLAGE0": "ANCGA3",
+        "X": 1,
+        "Y": 8,
+        "Z": 1
+    },
+    {
+        "FANLAGE0": "ANCGA3",
+        "X": 1,
+        "Y": 9,
+        "Z": 1
+    }
+]
+ANCGA4[
+    {
+        "FANLAGE0": "ANCGA4",
+        "X": 1,
+        "Y": 1,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0435516",
+        "KANR0": "7500038",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "7Z7Z",
+        "VZLAND": "VY ",
+        "MODELL": "BZ42",
+        "FANLAGE0": "ANCGA4",
+        "X": 1,
+        "Y": 2,
+        "Z": 0
+    },
+    {
+        "FANLAGE0": "ANCGA4",
+        "X": 1,
+        "Y": 3,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2022",
+        "KNR": "4953068",
+        "KANR0": "6494369",
+        "WERK0": "51",
+        "SPJ0": "2022",
+        "FARBAU": "7Z7Z",
+        "VZLAND": "VY ",
+        "MODELL": "5UD6",
+        "FANLAGE0": "ANCGA4",
+        "X": 1,
+        "Y": 4,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0425503",
+        "KANR0": "7481922",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "7Z7Z",
+        "VZLAND": "VY ",
+        "MODELL": "BZ44",
+        "FANLAGE0": "ANCGA4",
+        "X": 1,
+        "Y": 5,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0315100",
+        "KANR0": "7500585",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "B4B4",
+        "VZLAND": "VY ",
+        "MODELL": "BZ38",
+        "FANLAGE0": "ANCGA4",
+        "X": 1,
+        "Y": 6,
+        "Z": 0
+    },
+    {
+        "FANLAGE0": "ANCGA4",
+        "X": 1,
+        "Y": 7,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0315108",
+        "KANR0": "7501450",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "6K6K",
+        "VZLAND": "VY ",
+        "MODELL": "BZ32",
+        "FANLAGE0": "ANCGA4",
+        "X": 1,
+        "Y": 8,
+        "Z": 0
+    },
+    {
+        "FANLAGE0": "ANCGA4",
+        "X": 1,
+        "Y": 9,
+        "Z": 0
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2022",
+        "KNR": "4953065",
+        "KANR0": "6494421",
+        "WERK0": "51",
+        "SPJ0": "2022",
+        "FARBAU": "7Z7Z",
+        "VZLAND": "VY ",
+        "MODELL": "5UD6",
+        "FANLAGE0": "ANCGA4",
+        "X": 1,
+        "Y": 1,
+        "Z": 1
+    },
+    {
+        "FANLAGE0": "ANCGA4",
+        "X": 1,
+        "Y": 2,
+        "Z": 1
+    },
+    {
+        "FANLAGE0": "ANCGA4",
+        "X": 1,
+        "Y": 3,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0335507",
+        "KANR0": "7500005",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "7Z7Z",
+        "VZLAND": "VY ",
+        "MODELL": "BZ42",
+        "FANLAGE0": "ANCGA4",
+        "X": 1,
+        "Y": 4,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0445510",
+        "KANR0": "7481930",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "7Z7Z",
+        "VZLAND": "VY ",
+        "MODELL": "BZ44",
+        "FANLAGE0": "ANCGA4",
+        "X": 1,
+        "Y": 5,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0314083",
+        "KANR0": "6494500",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "B4B4",
+        "VZLAND": "ME ",
+        "MODELL": "5UFN",
+        "FANLAGE0": "ANCGA4",
+        "X": 1,
+        "Y": 6,
+        "Z": 1
+    },
+    {
+        "FANLAGE0": "ANCGA4",
+        "X": 1,
+        "Y": 7,
+        "Z": 1
+    },
+    {
+        "WERK": "51",
+        "SPJ": "2023",
+        "KNR": "0314065",
+        "KANR0": "6494485",
+        "WERK0": "51",
+        "SPJ0": "2023",
+        "FARBAU": "7Z7Z",
+        "VZLAND": "VY ",
+        "MODELL": "5UFT",
+        "FANLAGE0": "ANCGA4",
+        "X": 1,
+        "Y": 8,
+        "Z": 1
+    },
+    {
+        "FANLAGE0": "ANCGA4",
+        "X": 1,
+        "Y": 9,
+        "Z": 1
+    }
+]
