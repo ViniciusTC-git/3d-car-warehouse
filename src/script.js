@@ -263,7 +263,7 @@ function init() {
 
 	loader.load(carUrl.href, (car) => {
 		const objLoader = new THREE.ObjectLoader();
-
+		console.log(trelUrl)
 		objLoader.load(trelUrl.href, (trel) => {
 			createPointITrel({ id: 1, trel: trel.clone(), name: "TREL_POINT_I", x: 8, z: -56, points: ["ME_03", "ME_04"] });
 			createTrel({ id: 1,  trel: trel.clone(), name: "TREL_01", x: -48, z: -4, groups: ["GROUP_01", "GROUP_02"], buffer: 'Optimo' });
